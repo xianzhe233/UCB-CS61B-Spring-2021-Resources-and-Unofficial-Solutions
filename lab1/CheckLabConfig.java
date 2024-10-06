@@ -1,5 +1,8 @@
 import java.io.File;
 
+/**
+ * The plugin “CS 61B Snaps” is not compatible for my IDEA version, so I can't complete the Snap task. I'm so sorry:(
+ */
 public class CheckLabConfig {
 	public static void checkConfig(boolean isWindows) {
 		String repoVariableName = "REPO_DIR";
