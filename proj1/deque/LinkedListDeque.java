@@ -1,8 +1,8 @@
 package deque;
 
 public class LinkedListDeque<T> {
-    Node<T> head;
-    int size;
+    private Node<T> head;
+    private int size;
 
     /** Node class of the linked list. */
     private class Node<T> {
@@ -17,7 +17,7 @@ public class LinkedListDeque<T> {
         }
     }
 
-    /** Generate a new sentinel node. */
+    /** Creates a new sentinel node. */
     private Node<T> newSentinel() {
         Node<T> sentinel = new Node<>(null, null, null);
         sentinel.next = sentinel;
