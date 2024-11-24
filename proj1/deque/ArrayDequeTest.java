@@ -41,4 +41,42 @@ public class ArrayDequeTest {
             assertEquals(i, num);
         }
     }
+
+    @Test
+    /** Adds a few things to the ArrayDeque, test if printDeque work. */
+    public void printDequeTest() {
+        ArrayDeque<Integer> deque = new ArrayDeque<>();
+        for (int i = 1; i <= 8; i++) {
+            deque.addLast(i);
+            deque.printDeque();
+        }
+        deque.printDeque();
+
+    }
+
+    @Test
+    /** Adds a lot of things to the ArrayDeque to test doubling resize(). */
+    public void resizeDoublingTest() {
+        ArrayDeque<Integer> deque = new ArrayDeque<>();
+        deque.addFirst(0);
+        for (int i = 1; i <= 32; i++) {
+            deque.addLast(i);
+            int num = deque.get(i);
+            assertEquals(i, num);
+        }
+    }
+
+    @Test
+    /** Keeps deleting items from a big ArrayDeque to test halving resize(). */
+    public void resizeHalvingTest() {
+        ArrayDeque<Integer> deque = new ArrayDeque<>();
+        for (int i = 0; i <= 129; i++) {
+            deque.addLast(i);
+        }
+
+        for (int i = 0; i <= 128; i++) {
+            int num = deque.removeFirst();
+            assertEquals(i, num);
+        }
+    }
 }
