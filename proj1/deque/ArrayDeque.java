@@ -7,7 +7,7 @@ public class ArrayDeque<T> {
     private int nextLast;
 
     public ArrayDeque() {
-        array = (T[]) new Object[10];
+        array = (T[]) new Object[8];
         size = 0;
         nextFirst = 0;
         nextLast = 1;
@@ -28,8 +28,45 @@ public class ArrayDeque<T> {
         return circulate(nextLast - 1);
     }
 
+    /** Resizes array to length newSize. */
+    private void resize(int newSize) {
+        T[] newArray = (T[]) new Object[newSize];
+        int begin = firstPos();
+        int end = lastPos();
+        int newBegin = newSize / 4;
+        int newEnd = newBegin + size - 1;
+
+        if (begin < end) {
+            System.arraycopy(array, begin, newArray, newBegin, size);
+        } else {
+            System.arraycopy(array, begin, newArray, newBegin, size-begin);
+            System.arraycopy(array, 0, newArray, newBegin + size - begin, end + 1);
+        }
+
+        nextFirst = newBegin - 1;
+        nextLast = newEnd + 1;
+        array = newArray;
+    }
+
+    /** If array is full before adding an item, resizes it to double. */
+    private void resizeDouble() {
+        if (size == array.length) {
+            resize(array.length * 2);
+        }
+    }
+
+    /** If array's usage factor < 25% and array's length >= 16 after deleting an item, resizes it to half. */
+    private void resizeHalf() {
+        double usageFactor = (double) size / (double) array.length;
+        if (usageFactor < 0.25 && array.length >= 16) {
+            resize(array.length / 2);
+        }
+    }
+
     /** Adds an item of type T to the front of the deque.*/
     public void addFirst(T item) {
+        resizeDouble();
+
         size++;
         array[nextFirst] = item;
         nextFirst = circulate(nextFirst - 1);
@@ -37,6 +74,8 @@ public class ArrayDeque<T> {
 
     /** Adds an item of type T to the back of the deque. */
     public void addLast(T item) {
+        resizeDouble();
+
         size++;
         array[nextLast] = item;
         nextLast = circulate(nextLast + 1);
@@ -55,8 +94,11 @@ public class ArrayDeque<T> {
     /** Prints the items in the deque from first to last, separated by a space.
      * Once all the items have been printed, print out a new line. */
     public void printDeque() {
-        for (int i = circulate(nextFirst + 1); i != nextLast; i = circulate(i + 1)) {
+        for (int i = firstPos(); ; i = circulate(i + 1)) {
             System.out.print(array[i] + " ");
+            if (i == lastPos()) {
+                break;
+            }
         }
         System.out.println();
     }
@@ -72,6 +114,8 @@ public class ArrayDeque<T> {
         array[pos] = null;
         size--;
         nextFirst = pos;
+        resizeHalf();
+
         return item;
     }
 
@@ -86,6 +130,8 @@ public class ArrayDeque<T> {
         array[pos] = null;
         size--;
         nextLast = pos;
+        resizeHalf();
+
         return item;
     }
 
@@ -94,16 +140,8 @@ public class ArrayDeque<T> {
     public T get(int index) {
         if (index >= size) {
             return null;
+        } else {
+            return array[circulate(firstPos() + index)];
         }
-
-        int p = firstPos();
-        T item = array[p];
-        while (index > 0) {
-            p = circulate(p + 1);
-            item = array[p];
-            index--;
-        }
-
-        return item;
     }
 }
