@@ -79,4 +79,16 @@ public class ArrayDequeTest {
             assertEquals(i, num);
         }
     }
+
+    @Test
+    /** Tests iterator(). */
+    public void iteratorTest() {
+        ArrayDeque<Integer> deque = new ArrayDeque<>();
+        for (int i = 0; i <= 7; i++) {
+            deque.addLast(i);
+        }
+        for (int i : deque) {
+            System.out.println(i);
+        }
+    }
 }
