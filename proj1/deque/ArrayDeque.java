@@ -72,7 +72,8 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     }
 
     /**
-     * If array's usage factor < 25% and array's length >= 16 after deleting an item, resizes it to half.
+     * If array's usage factor < 25% and array's length >= 16 after deleting an item,
+     * resizes it to half.
      */
     private void resizeHalf() {
         double usageFactor = (double) size / (double) array.length;
@@ -119,7 +120,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
      */
     @Override
     public void printDeque() {
-        for (int i = firstPos(); ; i = circulate(i + 1)) {
+        for (int i = firstPos(); true; i = circulate(i + 1)) {
             System.out.print(array[i] + " ");
             if (i == lastPos()) {
                 break;
@@ -198,26 +199,6 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         return new ArrayDequeIterator();
     }
 
-    /*
-        public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (o instanceof Deque d) {
-            if (this.size != d.size()) return false;
-            Iterator<T> it1 = this.iterator();
-            Iterator<T> it2 = d.iterator();
-            while (it1.hasNext()) {
-                T item1 = it1.next();
-                T item2 = it2.next();
-                if (item1 != item2) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-    */
     @Override
     public boolean equals(Object o) {
         if (this == o) {
