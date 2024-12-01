@@ -163,4 +163,16 @@ public class LinkedListDequeTest {
             assertEquals(i, getValue);
         }
     }
+
+    @Test
+    /** Tests iterator(). */
+    public void iteratorTest() {
+        LinkedListDeque<Integer> deque = new LinkedListDeque<>();
+        for (int i = 0; i <= 7; i++) {
+            deque.addLast(i);
+        }
+        for (int i : deque) {
+            System.out.println(i);
+        }
+    }
 }
