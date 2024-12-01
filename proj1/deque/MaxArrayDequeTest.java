@@ -2,11 +2,11 @@ package deque;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import java.util.Comparator;
-import java.util.LinkedList;
 
 public class MaxArrayDequeTest {
 
-    private class lenComparator implements Comparator<String> {
+    /** A Comparator that compares the length of strings. */
+    private class LenComparator implements Comparator<String> {
         public int compare(String o1, String o2) {
             return o1.length() - o2.length();
         }
@@ -16,7 +16,7 @@ public class MaxArrayDequeTest {
     /** Create a string MaxArrayDeque and tests max() method. Since max() uses the parameter version
      * max(), there's no need to test individually. */
     public void maxTest() {
-        Comparator<String> c = new lenComparator();
+        Comparator<String> c = new LenComparator();
         MaxArrayDeque<String> d = new MaxArrayDeque<>(c);
         d.addLast("a");
         d.addLast("word");
