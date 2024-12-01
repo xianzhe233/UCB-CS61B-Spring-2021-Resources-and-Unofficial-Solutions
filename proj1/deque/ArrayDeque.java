@@ -164,19 +164,40 @@ public class ArrayDeque<T> implements Deque<T> {
         return new ArrayDequeIterator();
     }
 
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//
+//        if (o instanceof Deque d) {
+//            if (this.size != d.size()) return false;
+//            Iterator<T> it1 = this.iterator();
+//            Iterator<T> it2 = d.iterator();
+//            while (it1.hasNext()) {
+//                T item1 = it1.next();
+//                T item2 = it2.next();
+//                if (item1 != item2) {
+//                    return false;
+//                }
+//            }
+//        }
+//
+//        return true;
+//    }
     public boolean equals(Object o) {
         if (this == o) return true;
 
-        if (o instanceof Deque d) {
-            if (this.size != d.size()) return false;
-            Iterator<T> it1 = this.iterator();
-            Iterator<T> it2 = d.iterator();
-            while (it1.hasNext()) {
-                T item1 = it1.next();
-                T item2 = it2.next();
-                if (item1 != item2) {
-                    return false;
-                }
+        /* I think it's a stupid way to do like this, but I have no other ideas. */
+        if (o == null || o.getClass() != LinkedListDeque.class && o.getClass() != ArrayDeque.class) return false;
+
+        Deque<T> d = (Deque<T>) o;
+        if (this.size != d.size()) return false;
+
+        Iterator<T> it1 = this.iterator();
+        Iterator<T> it2 = d.iterator();
+        while (it1.hasNext()) {
+            T item1 = it1.next();
+            T item2 = it2.next();
+            if (item1 != item2) {
+                return false;
             }
         }
 
