@@ -5,7 +5,12 @@ public interface Deque<T> {
 
     void addFirst(T item);
     void addLast(T item);
-    boolean isEmpty();
+
+    /** Returns true if deque is empty, false otherwise. */
+    default boolean isEmpty() {
+        return size() == 0;
+    }
+
     int size();
     void printDeque();
     T removeFirst();
