@@ -1,6 +1,7 @@
 package deque;
+import java.util.Iterator;
 
-public class LinkedListDeque<T> {
+public class LinkedListDeque<T> implements Deque<T> {
     private Node<T> head;
     private int size;
 
@@ -72,7 +73,7 @@ public class LinkedListDeque<T> {
             System.out.print(p.item + " ");
             p = p.next;
         }
-        System.out.println("");
+        System.out.println();
     }
 
     /** Removes and returns the item at the front of the deque. If no such item exists, returns null. */
@@ -136,6 +137,43 @@ public class LinkedListDeque<T> {
             return p.item;
         }
         return recursiveGet(index - 1, p.next);
+    }
+
+    private class LinkedListDequeIterator implements Iterator<T> {
+        Node<T> p = head.next;
+
+        public boolean hasNext() {
+            return p != head;
+        }
+
+        public T next() {
+            T returnItem = p.item;
+            p = p.next;
+            return returnItem;
+        }
+    }
+
+    public Iterator<T> iterator() {
+        return new LinkedListDequeIterator();
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o instanceof Deque d) {
+            if (this.size != d.size()) return false;
+            Iterator<T> it1 = this.iterator();
+            Iterator<T> it2 = d.iterator();
+            while (it1.hasNext()) {
+                T item1 = it1.next();
+                T item2 = it2.next();
+                if (item1 != item2) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }
 
