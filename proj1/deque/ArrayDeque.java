@@ -203,8 +203,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
             return true;
         }
 
-        /* I think it's a stupid way to do like this, but I have no other ideas. */
-        if (o == null || (o.getClass() != LinkedListDeque.class && o.getClass() != ArrayDeque.class)) {
+        if (o == null || !(o instanceof Deque)) {
             return false;
         }
 
@@ -226,7 +225,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         while (it1.hasNext()) {
             T item1 = it1.next();
             T item2 = it2.next();
-            if (item1 != item2) {
+            if (!item1.equals(item2)) {
                 return false;
             }
         }
