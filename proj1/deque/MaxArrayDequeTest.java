@@ -1,11 +1,16 @@
 package deque;
+
 import org.junit.Test;
+
 import static org.junit.Assert.*;
+
 import java.util.Comparator;
 
 public class MaxArrayDequeTest {
 
-    /** A Comparator that compares the length of strings. */
+    /**
+     * A Comparator that compares the length of strings.
+     */
     private class LenComparator implements Comparator<String> {
         public int compare(String o1, String o2) {
             return o1.length() - o2.length();

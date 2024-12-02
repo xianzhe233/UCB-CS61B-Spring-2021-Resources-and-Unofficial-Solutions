@@ -84,15 +84,14 @@ public class GuitarPlayer {
             MidiMessage msg = event.getMessage();
             byte[] data = msg.getMessage();
 
-            if (msg instanceof MetaMessage) {
-                MetaMessage mm = (MetaMessage) msg;
+            if (msg instanceof MetaMessage mm) {
                 if (mm.getType() == 0x51) {
                     // set tempo
                     data = mm.getData();
                     int tempo = (data[0] & 0xff) << 16 | (data[1] & 0xff) << 8 | (data[2] & 0xff);
                     bpm = 60000000.0 / tempo;
                     samplesPerTick = StdAudio.SAMPLE_RATE
-                        * (60.0 / (sequence.getResolution() * bpm));
+                            * (60.0 / (sequence.getResolution() * bpm));
                 } else if (mm.getType() == 0x05) {
                     // lyrics
                     data = mm.getData();
