@@ -178,29 +178,35 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         }
     }
 
-    @Override
     public Iterator<T> iterator() {
         return new LinkedListDequeIterator();
     }
 
-    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
 
         /* I think it's a stupid way to do like this, but I have no other ideas. */
-        if (o == null || o.getClass() != LinkedListDeque.class && o.getClass() != ArrayDeque.class) {
+        if (o == null || (o.getClass() != LinkedListDeque.class && o.getClass() != ArrayDeque.class)) {
             return false;
         }
 
         Deque<T> d = (Deque<T>) o;
+
         if (this.size != d.size()) {
             return false;
         }
 
         Iterator<T> it1 = this.iterator();
-        Iterator<T> it2 = d.iterator();
+        Iterator<T> it2;
+
+        if (o.getClass() == LinkedListDeque.class) {
+            it2 = ((LinkedListDeque<T>) d).iterator();
+        } else {
+            it2 = ((ArrayDeque<T>) d).iterator();
+        }
+
         while (it1.hasNext()) {
             T item1 = it1.next();
             T item2 = it2.next();
