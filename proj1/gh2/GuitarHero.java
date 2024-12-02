@@ -1,4 +1,5 @@
 package gh2;
+
 import edu.princeton.cs.algs4.StdAudio;
 import edu.princeton.cs.algs4.StdDraw;
 
@@ -7,8 +8,8 @@ import edu.princeton.cs.algs4.StdDraw;
  */
 public class GuitarHero {
     public static final double CONCERT_A = 440.0;
-    public static String keyboard = "q2we4r5ty7u8i9op-[=zxdcfvgbnjmk,.;/' ";
-    public static GuitarString[] strings = new GuitarString[keyboard.length()];
+    private static String keyboard = "q2we4r5ty7u8i9op-[=zxdcfvgbnjmk,.;/' ";
+    private static GuitarString[] strings = new GuitarString[keyboard.length()];
 
     public static void main(String[] args) {
         stringInit();
@@ -33,13 +34,13 @@ public class GuitarHero {
         }
     }
 
-    public static GuitarString StringOfKey(int i) {
+    public static GuitarString stringOfKey(int i) {
         return new GuitarString(CONCERT_A * Math.pow(2, (i - 24) / 12));
     }
 
     public static void stringInit() {
         for (int i = 0; i < keyboard.length(); i++) {
-            strings[i] = StringOfKey(i);
+            strings[i] = stringOfKey(i);
         }
     }
 

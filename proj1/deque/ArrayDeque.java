@@ -8,9 +8,9 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private int nextFirst;
     private int nextLast;
 
-    private static int INIT_CAPACITY = 8;
-    private static int RESIZE_THRESHOLD = INIT_CAPACITY * 2;
-    private static double USAGE_FACTOR = 0.25;
+    private static final int INIT_CAPACITY = 8;
+    private static final int RESIZE_THRESHOLD = INIT_CAPACITY * 2;
+    private static final double USAGE_FACTOR = 0.25;
 
     public ArrayDeque() {
         array = (T[]) new Object[INIT_CAPACITY];

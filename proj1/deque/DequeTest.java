@@ -1,6 +1,8 @@
 package deque;
+
 import edu.princeton.cs.algs4.StdRandom;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 
@@ -13,13 +15,13 @@ public class DequeTest {
         ad1.addFirst(1);
         ad1.addFirst(2);
         ArrayDeque<Integer> ad2 = ad1;
-        assertEquals(true, ad1.equals(ad2));
+        assertTrue(ad1.equals(ad2));
 
         LinkedListDeque<Integer> lld1 = new LinkedListDeque<>();
         lld1.addFirst(1);
         lld1.addFirst(2);
         LinkedListDeque<Integer> lld2 = lld1;
-        assertEquals(true, lld1.equals(lld2));
+        assertTrue(lld1.equals(lld2));
     }
 
     @Test
@@ -29,21 +31,21 @@ public class DequeTest {
         ad1.addFirst(1);
         ArrayDeque<Integer> ad2 = new ArrayDeque<>();
         ad2.addFirst(1);
-        assertEquals(true, ad1.equals(ad2));
+        assertTrue(ad1.equals(ad2));
 
         ad1.addFirst(2);
         ad2.addFirst(3);
-        assertEquals(false, ad1.equals(ad2));
+        assertFalse(ad1.equals(ad2));
 
         LinkedListDeque<Integer> lld1 = new LinkedListDeque<>();
         lld1.addFirst(1);
         LinkedListDeque<Integer> lld2 = new LinkedListDeque<>();
         lld2.addFirst(1);
-        assertEquals(true, lld1.equals(lld2));
+        assertTrue(lld1.equals(lld2));
 
         lld1.addFirst(2);
         lld2.addFirst(3);
-        assertEquals(false, lld1.equals(lld2));
+        assertFalse(lld1.equals(lld2));
     }
 
     @Test
@@ -54,11 +56,11 @@ public class DequeTest {
         ArrayDeque<Integer> d2 = new ArrayDeque<>();
         d1.addFirst(1);
         d2.addFirst(1);
-        assertEquals(true, d1.equals(d2));
+        assertTrue(d1.equals(d2));
 
         d1.addFirst(2);
         d2.addFirst(3);
-        assertEquals(false, d1.equals(d2));
+        assertFalse(d1.equals(d2));
     }
 
     @Test
@@ -76,26 +78,26 @@ public class DequeTest {
             } else {
                 removeAll(d1, d2, d3, d4, operationPos);
             }
-            assertEquals(true, d1.equals(d2) && d3.equals(d4) && d1.equals(d3));
+            assertTrue(d1.equals(d2) && d3.equals(d4) && d1.equals(d3));
         }
     }
 
     public void addAll(Deque<Integer> d1, Deque<Integer> d2, Deque<Integer> d3, Deque<Integer> d4, boolean isAddFirst) {
-            int item = StdRandom.uniform(0, 10000);
-            if (d1.isEmpty()) {
-                return;
-            }
-            if (isAddFirst) {
-                d1.addFirst(item);
-                d2.addFirst(item);
-                d3.addFirst(item);
-                d4.addFirst(item);
-            } else {
-                d1.addLast(item);
-                d2.addLast(item);
-                d3.addLast(item);
-                d4.addLast(item);
-            }
+        int item = StdRandom.uniform(0, 10000);
+        if (d1.isEmpty()) {
+            return;
+        }
+        if (isAddFirst) {
+            d1.addFirst(item);
+            d2.addFirst(item);
+            d3.addFirst(item);
+            d4.addFirst(item);
+        } else {
+            d1.addLast(item);
+            d2.addLast(item);
+            d3.addLast(item);
+            d4.addLast(item);
+        }
     }
 
     public void removeAll(Deque<Integer> d1, Deque<Integer> d2, Deque<Integer> d3, Deque<Integer> d4, boolean isRemoveFirst) {
