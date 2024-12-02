@@ -25,7 +25,8 @@ public class DequeTest {
     }
 
     @Test
-    /** Creates two different Deques with same subclass, test equals() behavior within same subclass. */
+    /** Creates two different Deques with same subclass,
+     * test equals() behavior within same subclass. */
     public void sameSubclassEqualsTest() {
         ArrayDeque<Integer> ad1 = new ArrayDeque<>();
         ad1.addFirst(1);
@@ -82,7 +83,8 @@ public class DequeTest {
         }
     }
 
-    public void addAll(Deque<Integer> d1, Deque<Integer> d2, Deque<Integer> d3, Deque<Integer> d4, boolean isAddFirst) {
+    public void addAll(Deque<Integer> d1, Deque<Integer> d2,
+                       Deque<Integer> d3, Deque<Integer> d4, boolean isAddFirst) {
         int item = StdRandom.uniform(0, 10000);
         if (d1.isEmpty()) {
             return;
@@ -100,7 +102,8 @@ public class DequeTest {
         }
     }
 
-    public void removeAll(Deque<Integer> d1, Deque<Integer> d2, Deque<Integer> d3, Deque<Integer> d4, boolean isRemoveFirst) {
+    public void removeAll(Deque<Integer> d1, Deque<Integer> d2,
+                          Deque<Integer> d3, Deque<Integer> d4, boolean isRemoveFirst) {
         if (isRemoveFirst) {
             d1.removeFirst();
             d2.removeFirst();
