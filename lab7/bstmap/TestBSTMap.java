@@ -3,6 +3,8 @@ package bstmap;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
+import java.util.Iterator;
+
 /** Tests by Brendan Hu, Spring 2015, revised for 2016 by Josh Hug */
 public class TestBSTMap {
 
@@ -93,5 +95,18 @@ public class TestBSTMap {
         for (int i = 0; i < 20; i++)
             b.put(i, i);
         b.printInOrder();
+    }
+
+    @Test
+    public void iteratorTest() {
+        BSTMap<Integer, Integer> b = new BSTMap<>();
+        for (int i = 0; i < 20; i++)
+            b.put(i, i);
+        Iterator<Integer> it = b.iterator();
+        int cnt = 0;
+        while (it.hasNext()) {
+            assertEquals(new Integer(cnt), it.next());
+            cnt++;
+        }
     }
 }
