@@ -5,17 +5,18 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-public class BSTMap<K extends Comparable, V> implements Map61B<K, V>{
+public class BSTMap<K extends Comparable, V> implements Map61B<K, V> {
     /** Node class includes key and value.*/
     private class Node<K, V> {
         K key;
         V value;
-        Node<K, V> left, right;
-        public Node(K key, V value, Node<K, V> left, Node<K, V> right) {
+        Node<K, V> left, right, parent;
+        public Node(K key, V value, Node<K, V> left, Node<K, V> right, Node<K, V> parent) {
             this.key = key;
             this.value = value;
             this.left = left;
             this.right = right;
+            this.parent = parent;
         }
 
         /** Prints subtrees' values recursively. */
@@ -48,20 +49,28 @@ public class BSTMap<K extends Comparable, V> implements Map61B<K, V>{
         return keySet.contains(key);
     }
 
-    /** Finds key's value from tree. */
-    private V find(Node<K, V> tree, K key) {
-        if (tree == null) return null;
-        if (tree.key.equals(key)) return tree.value;
-        else {
-            if (key.compareTo(tree.key) < 0) return find(tree.left, key);
-            else {
+    /** Finds key's node from tree. */
+    private Node<K, V> find(Node<K, V> tree, K key) {
+        if (tree == null) {
+            return null;
+        }
+        if (tree.key.equals(key)) {
+            return tree;
+        } else {
+            if (key.compareTo(tree.key) < 0) {
+                return find(tree.left, key);
+            } else {
                 return find(tree.right, key);
             }
         }
     }
 
     public V get(K key) {
-        return (V) find(root, key);
+        Node node = find(root, key);
+        if (node == null) {
+            return null;
+        }
+        return (V) node.value;
     }
 
     public int size() {
@@ -69,31 +78,37 @@ public class BSTMap<K extends Comparable, V> implements Map61B<K, V>{
     }
 
     /** Inserts a key-value pair into tree. */
-    private Node<K, V> insert(Node<K, V> tree, K key, V value) {
+    private Node<K, V> insert(Node<K, V> tree, Node<K, V> parent, K key, V value) {
         if (tree == null) {
             keySet.add(key);
             size++;
-            return new Node(key, value, null, null);
+            return new Node(key, value, null, null, parent);
         }
         if (key.compareTo(tree.key) < 0) {
-            tree.left = insert(tree.left, key, value);
-        }
-        else {
-            tree.right = insert(tree.right, key, value);
+            tree.left = insert(tree.left, tree, key, value);
+        } else {
+            tree.right = insert(tree.right, tree, key, value);
         }
         return tree;
     }
 
     public void put(K key, V value) {
-        root = insert(root, key, value);
+        root = insert(root, root, key, value);
     }
 
     public Set<K> keySet() {
         return keySet;
     }
 
+    private V delete(Node<K, V> node, K key) {
+
+    }
+
     public V remove(K key) {
-        throw new UnsupportedOperationException();
+        // If node to be deleted is leaf, just delete;
+        // If the node has only one child, let the child replace it.
+        // If the node has two children, let its successor replace it
+        // and delete the successor.
     }
 
     public V remove(K key, V value) {
@@ -101,7 +116,7 @@ public class BSTMap<K extends Comparable, V> implements Map61B<K, V>{
     }
 
     public Iterator<K> iterator() {
-        throw new UnsupportedOperationException();
+        return keySet.iterator();
     }
 
     /** Prints out the BSTMap in order of increasing key. */
@@ -110,5 +125,26 @@ public class BSTMap<K extends Comparable, V> implements Map61B<K, V>{
             root.print();
         }
         System.out.println();
+    }
+
+    /** Returns the successor of node. */
+    private Node<K, V> successor(Node<K, V> node) {
+        node = node.right;
+        while (node.left != null) {
+            node = node.left;
+        }
+        return node;
+    }
+
+    /** Returns the number of node's children. (Can be 0, 1 or 2) */
+    private int numOfChildren(Node<K, V> node) {
+        int cnt = 0;
+        if (node.left != null) {
+            cnt += 1;
+        }
+        if (node.right != null) {
+            cnt += 1;
+        }
+        return cnt;
     }
 }
