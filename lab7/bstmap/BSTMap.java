@@ -112,7 +112,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     }
 
     /** Operation of deleting node. */
-    public void delete(Node<K, V> node) {
+    private void delete(Node<K, V> node) {
         int children = numOfChildren(node);
         boolean side = getSide(node);
         keySet.remove(node.key);
