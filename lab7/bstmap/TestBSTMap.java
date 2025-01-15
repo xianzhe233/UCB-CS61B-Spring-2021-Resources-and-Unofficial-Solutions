@@ -109,4 +109,22 @@ public class TestBSTMap {
             cnt++;
         }
     }
+
+    @Test
+    public void removeTest() {
+        BSTMap<Integer, Integer> b = new BSTMap<>();
+        b.put(8, 8);
+        b.put(2, 2);
+        b.put(1, 1);
+        b.put(4, 4);
+        b.put(32, 32);
+        b.put(16, 16);
+        b.put(64, 64);
+        System.out.println(b.remove(1));
+        assertEquals(6, b.size());
+        System.out.println(b.remove(32));
+        assertEquals(5, b.size());
+        System.out.println(b.remove(8));
+        assertEquals(4, b.size());
+    }
 }
