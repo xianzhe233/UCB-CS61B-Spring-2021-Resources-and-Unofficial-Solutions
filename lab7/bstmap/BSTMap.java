@@ -1,5 +1,7 @@
 package bstmap;
 
+import afu.org.checkerframework.checker.oigj.qual.O;
+
 import java.security.Key;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -39,12 +41,14 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         this.clear();
     }
 
+    @Override
     public void clear() {
         root = null;
         size = 0;
         keySet = new HashSet<K>();
     }
 
+    @Override
     public boolean containsKey(K key) {
         return keySet.contains(key);
     }
@@ -65,6 +69,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         }
     }
 
+    @Override
     public V get(K key) {
         Node node = find(root, key);
         if (node == null) {
@@ -73,6 +78,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         return (V) node.value;
     }
 
+    @Override
     public int size() {
         return size;
     }
@@ -92,10 +98,12 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         return tree;
     }
 
+    @Override
     public void put(K key, V value) {
         root = insert(root, null, key, value);
     }
 
+    @Override
     public Set<K> keySet() {
         return keySet;
     }
@@ -175,6 +183,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         }
     }
 
+    @Override
     public V remove(K key) {
         // If node to be deleted is leaf, just delete;
         // If the node has only one child, let the child replace it.
@@ -186,6 +195,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         return (V) delete(root, key);
     }
 
+    @Override
     public V remove(K key, V value) {
         Node<K, V> node = find(root, key);
         if (value.equals(node.value)) {
@@ -194,6 +204,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         return null;
     }
 
+    @Override
     public Iterator<K> iterator() {
         return keySet.iterator();
     }
