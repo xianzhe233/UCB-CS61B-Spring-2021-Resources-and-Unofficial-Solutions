@@ -93,8 +93,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     }
 
     public void put(K key, V value) {
-        root = insert(root, root, key, value);
-        root.parent = root;
+        root = insert(root, null, key, value);
     }
 
     public Set<K> keySet() {
@@ -103,8 +102,10 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
     /** Returns which side node is, 0 for left and 1 for right. */
     private boolean getSide(Node<K, V> node) {
-        Node<K, V> parent = node.parent;
-        if (parent.left == node) {
+        if (node.parent == null) {
+            return true;
+        }
+        if (node.parent.left == node) {
             return false;
         } else {
             return true;
@@ -119,7 +120,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         switch (children) {
             case 0:
                 size--;
-                if (node == root) {
+                if (node.parent == null) {
                     root = null;
                     break;
                 }
@@ -137,18 +138,24 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
                 } else {
                     child = node.right;
                 }
-                if (side == false) {
-                    node.parent.left = child;
-                } else {
-                    node.parent.right = child;
-                }
+
                 child.parent = node.parent;
+                if (node.parent == null) {
+                    root = child;
+                } else {
+                    if (side == false) {
+                        node.parent.left = child;
+                    } else {
+                        node.parent.right = child;
+                    }
+                }
                 break;
             case 2:
                 Node<K, V> successor = successor(node);
                 node.key = successor.key;
                 node.value = successor.value;
                 delete(successor);
+                keySet.add(node.key);
                 break;
         }
     }
