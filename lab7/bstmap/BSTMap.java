@@ -142,6 +142,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
                 } else {
                     node.parent.right = child;
                 }
+                child.parent = node.parent;
                 break;
             case 2:
                 Node<K, V> successor = successor(node);
