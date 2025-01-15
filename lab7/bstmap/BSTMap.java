@@ -94,14 +94,77 @@ public class BSTMap<K extends Comparable, V> implements Map61B<K, V> {
 
     public void put(K key, V value) {
         root = insert(root, root, key, value);
+        root.parent = root;
     }
 
     public Set<K> keySet() {
         return keySet;
     }
 
-    private V delete(Node<K, V> node, K key) {
+    /** Returns which side node is, 0 for left and 1 for right. */
+    private boolean getSide(Node<K, V> node) {
+        Node<K, V> parent = node.parent;
+        if (parent.left == node) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
+    /** Operation of deleting node. */
+    public void delete(Node<K, V> node) {
+        int children = numOfChildren(node);
+        boolean side = getSide(node);
+        keySet.remove(node.key);
+        switch (children) {
+            case 0:
+                size--;
+                if (node == root) {
+                    root = null;
+                    break;
+                }
+                if (side == false) {
+                    node.parent.left = null;
+                } else {
+                    node.parent.right = null;
+                }
+                break;
+            case 1:
+                size--;
+                Node<K, V> child;
+                if (node.left != null) {
+                    child = node.left;
+                } else {
+                    child = node.right;
+                }
+                if (side == false) {
+                    node.parent.left = child;
+                } else {
+                    node.parent.right = child;
+                }
+                break;
+            case 2:
+                Node<K, V> successor = successor(node);
+                node.key = successor.key;
+                node.value = successor.value;
+                delete(successor);
+                break;
+        }
+    }
+
+    /** deletes node with key in tree. */
+    private V delete(Node<K, V> tree, K key) {
+        if (key.equals(tree.key)) {
+            V value = tree.value;
+            delete(tree);
+            return value;
+        } else {
+            if (key.compareTo(tree.key) < 0) {
+                return delete(tree.left, key);
+            } else {
+                return delete(tree.right, key);
+            }
+        }
     }
 
     public V remove(K key) {
@@ -109,10 +172,18 @@ public class BSTMap<K extends Comparable, V> implements Map61B<K, V> {
         // If the node has only one child, let the child replace it.
         // If the node has two children, let its successor replace it
         // and delete the successor.
+        if (!keySet.contains(key)) {
+            return null;
+        }
+        return (V) delete(root, key);
     }
 
     public V remove(K key, V value) {
-        throw new UnsupportedOperationException();
+        Node<K, V> node = find(root, key);
+        if (value.equals(node.value)) {
+            return delete(node, key);
+        }
+        return null;
     }
 
     public Iterator<K> iterator() {
