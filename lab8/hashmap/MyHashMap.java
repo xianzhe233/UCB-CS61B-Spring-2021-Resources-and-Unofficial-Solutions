@@ -28,6 +28,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     /* Instance Variables */
     private static final int DEFAULT_INITIAL_SIZE = 16;
     private static final double DEFAULT_LOAD_FACTOR = 0.75;
+    private static final int RESIZE_FACTOR = 2;
 
     private Collection<Node<K, V>>[] buckets;
     private int size;
@@ -143,8 +144,32 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         return size;
     }
 
+    /** Returns loadFactor for now. */
+    private double loadFactor() {
+        return size / buckets.length;
+    }
+
+    /** If loadFactor is above maxLoad, resize it with RESIZE_FACTOR. */
+    private void resizeBuckets() {
+        if (loadFactor() > maxLoad) {
+            LinkedList<Node<K, V>> nodes = new LinkedList<>();
+            for (K key : keySet) {
+                nodes.add(getFromBucket(buckets[MyHash(key)], key));
+            }
+            buckets = createTable(buckets.length * RESIZE_FACTOR);
+            for (Node<K, V> node : nodes) {
+                Collection<Node<K, V>> bucket = buckets[MyHash(node.key)];
+                if (bucket == null) {
+                    bucket = buckets[MyHash(node.key)] = createBucket();
+                }
+                buckets[MyHash(node.key)].add(node);
+            }
+        }
+    }
+
     @Override
     public void put(K key, V value) {
+        resizeBuckets();
         Collection<Node<K, V>> bucket = buckets[MyHash(key)];
         if (bucket == null) {
             bucket = buckets[MyHash(key)] = createBucket();
