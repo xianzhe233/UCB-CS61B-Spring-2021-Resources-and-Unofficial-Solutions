@@ -236,4 +236,12 @@ class Utils {
         System.out.printf(msg, args);
         System.out.println();
     }
+
+    static void createFile(File file) {
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
