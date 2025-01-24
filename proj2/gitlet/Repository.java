@@ -21,7 +21,9 @@ public class Repository {
      */
 
     /** The current working directory. */
-    public static final File CWD = new File(System.getProperty("user.dir"));
+//    public static final File CWD = new File(System.getProperty("user.dir"));
+// TODO: Change CWD back finally.
+    public static final File CWD = new File("playground");
     /** The .gitlet directory. */
     public static final File GITLET_DIR = join(CWD, ".gitlet");
 
