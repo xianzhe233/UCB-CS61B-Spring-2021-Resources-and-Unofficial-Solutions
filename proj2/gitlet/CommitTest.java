@@ -4,7 +4,13 @@ import static org.junit.Assert.*;
 import gitlet.Utils;
 import gitlet.Commit;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+
 public class CommitTest {
+    static final String INITIAL_ID = "2bca61509088a86ded75abaf7eb7ff15f331fad6";
+
     @Test
     public void timeStampTest() {
         long timeStamp = Commit.getTimeStamp();
@@ -20,5 +26,69 @@ public class CommitTest {
         Commit init = Commit.getInitialCommit();
         System.out.println(init);
         System.out.println(Commit.dateOf(0));
+    }
+
+    @Test
+    public void commitExistsTest() {
+        Commit.getInitialCommit();
+        assertTrue(Commit.exists(INITIAL_ID));
+    }
+
+    @Test
+    public void commitGetTest() {
+        Commit init = Commit.getInitialCommit();
+        Commit initCommit = Commit.get(INITIAL_ID);
+        assertEquals(init.toString(), initCommit.toString());
+        System.out.println(initCommit);
+    }
+
+    @Test
+    public void commitGetAbbreviationTest() {
+        Commit init = Commit.getInitialCommit();
+        Commit initCommit = Commit.get(INITIAL_ID.substring(0, 6));
+        assertEquals(init.toString(), initCommit.toString());
+        System.out.println(initCommit);
+    }
+
+    @Test
+    public void commitPrintTest() {
+        Commit init = Commit.getInitialCommit();
+        Commit newCommit = new Commit(init, null, "new testing commit", new HashMap<>(), new HashSet<>());
+//        newCommit.print();
+//        init.print();
+//        Temporary test, print() needs to be private.
+    }
+
+    @Test
+    public void commitLogTest() {
+        Commit init = Commit.getInitialCommit();
+        Commit commit1 = new Commit(init, null, "commit1", new HashMap<>(), new HashSet<>());
+        Commit commit2 = new Commit(commit1, null, "commit2", new HashMap<>(), new HashSet<>());
+        Commit commit3 = new Commit(commit2, null, "commit3", new HashMap<>(), new HashSet<>());
+        Commit commit4 = new Commit(commit1, null, "commit4", new HashMap<>(), new HashSet<>());
+        Commit.log(commit3);
+    }
+
+//    @Test
+//    public void commitGetAllTest() {
+//        List<String> commits = Commit.getAllCommits();
+//        System.out.println(commits);
+//    }
+
+    @Test
+    public void commitGlobalLogTest() {
+        Commit.globalLog();
+    }
+
+    @Test
+    public void splitPointTest() {
+        Commit init = Commit.getInitialCommit();
+        Commit commit1 = new Commit(init, null, "commit1", new HashMap<>(), new HashSet<>());
+        Commit commit2 = new Commit(commit1, null, "commit2", new HashMap<>(), new HashSet<>());
+        Commit commit3 = new Commit(commit1, null, "commit3", new HashMap<>(), new HashSet<>());
+        Commit commit4 = new Commit(commit3, null, "commit4", new HashMap<>(), new HashSet<>());
+        Commit splitPoint = Commit.splitPoint(commit2, commit4);
+        System.out.println(splitPoint);
+        assertTrue(splitPoint.equals(commit1));
     }
 }
