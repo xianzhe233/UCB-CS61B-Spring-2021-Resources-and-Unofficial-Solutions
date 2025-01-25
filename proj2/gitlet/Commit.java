@@ -8,7 +8,9 @@ import java.util.*;
 import java.text.SimpleDateFormat;
 
 /** Represents a gitlet commit object.
- *
+ * Every Commit object contains commit metadata and a set of mapping relation
+ * between file-names and blobs. SHA-1 ids can be used to access specific
+ * Serialized Commit objects to implement persistence.
  *  @author xianzhe233
  */
 public class Commit implements Serializable {
