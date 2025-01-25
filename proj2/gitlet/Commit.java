@@ -22,8 +22,9 @@ public class Commit implements Serializable {
     /** The message of this Commit. */
     static final File COMMITS_DIR = join(Repository.GITLET_DIR, "commits");
     static final long INITIAL_TIMESTAMP = 0;
+    static final String INITIAL_ID = "2bca61509088a86ded75abaf7eb7ff15f331fad6";
 
-    private String id;
+    String id;
     private long timestamp;
     private String message;
     private HashMap<String, String> fileMap; // Maps file names to blobs
@@ -74,12 +75,20 @@ public class Commit implements Serializable {
         saveCommit(this);
     }
 
+    /** Returns the first 2 chars of id. */
+    static private String idHead(String id) {
+        return id.substring(0, 2);
+    }
+
+    /** Returns chars except the first 2 chars of id. */
+    static private String idTail(String id) {
+        return id.substring(2);
+    }
+
     /** Saves a commit into the proper file. */
     static void saveCommit(Commit commit) {
-        String commitIdHead = commit.id.substring(0, 2);
-        String commitIdTail = commit.id.substring(2);
-        File headDir = join(COMMITS_DIR, commitIdHead);
-        File commitFile = join(headDir, commitIdTail);
+        File headDir = join(COMMITS_DIR, idHead(commit.id));
+        File commitFile = join(headDir, idTail(commit.id));
 
         if (!headDir.exists()) {
             headDir.mkdirs();
@@ -105,8 +114,110 @@ public class Commit implements Serializable {
         return file;
     }
 
+    /** Returns if there exists exactly 1 commit with that id. */
+    static boolean exists(String id) {
+        if (id == null || id.length() <= 2) {
+            return false;
+        }
+        String idHead = idHead(id);
+        String idTail = idTail(id);
+        File secondaryDir = join(COMMITS_DIR, idHead);
+        if (!secondaryDir.exists()) {
+            return false;
+        }
+        List<String> commitNames = plainFilenamesIn(secondaryDir);
+        long count = commitNames.stream().filter(name -> name.startsWith(idTail)).count();
+        return count == 1;
+    }
 
+    /** Gets Commit object by commit id. Abbreviation supported. */
+    static Commit get(String id) {
+        File secondaryDir = join(COMMITS_DIR, idHead(id));
+        String idTail = idTail(id);
+        List<String> commitNames = plainFilenamesIn(secondaryDir);
+        for (String commitName : commitNames) {
+            if (commitName.startsWith(idTail)) {
+                File commitFile = join(secondaryDir, commitName);
+                return readObject(commitFile, Commit.class);
+            }
+        }
+        return null; // Because Command always check existence before get, this will never happen.
+    }
 
+    /** Returns true if this commit's id is equals to another commit's. */
+    boolean equals(Commit commit) {
+        return this.id.equals(commit.id);
+    }
+
+    private static boolean isInitial(Commit commit) {
+        return commit.id.equals(INITIAL_ID);
+    }
+
+    /** Prints out this commit's log message. */
+    private void print() {
+        System.out.println("===");
+        System.out.println("commit " + this.id);
+        System.out.println("Date: " + dateOf(this.timestamp));
+        System.out.println(this.message);
+        System.out.println("");
+    }
+
+    /** Prints logs from commit until initial commit. */
+    static void log(Commit commit) {
+        while (commit != null) {
+            commit.print();
+            if (isInitial(commit)) {
+                break;
+            }
+            commit = get(commit.parent);
+        }
+    }
+
+    /** Prints logs of all history commits. */
+    static void globalLog() {
+        List<String> historyCommits = getAllCommits();
+        for (String commitId : historyCommits) {
+            Commit commit = get(commitId);
+            commit.print();
+        }
+    }
+
+    /** Gets all commits from gitlet repository. */
+    private static List<String> getAllCommits() {
+        File[] dirs = COMMITS_DIR.listFiles();
+        List<String> commits = new ArrayList<>();
+        for (File dir : dirs) {
+           List<String> tailCommits = plainFilenamesIn(dir);
+           for (String commitTail : tailCommits) {
+               String dirPath = dir.getAbsolutePath();
+               String commitHead = dirPath.substring(dirPath.length() - 2);
+               commits.add(commitHead + commitTail);
+           }
+        }
+        return commits;
+    }
+
+    static Commit splitPoint(Commit c1, Commit c2) {
+        if (c1.equals(c2)) {
+            return c1;
+        }
+        HashSet<String> ancestors = new HashSet<>();
+        while (c1 != null) {
+            ancestors.add(c1.id);
+            if (isInitial(c1)) {
+                break;
+            }
+            c1 = get(c1.parent);
+        }
+        while (c2 != null) {
+            if (ancestors.contains(c2.id)) {
+                return c2;
+            }
+            c2 = get(c2.parent);
+        }
+
+        return null; // This should never happen.
+    }
 
     /** Displays commit message for debugging. */
     @Override
