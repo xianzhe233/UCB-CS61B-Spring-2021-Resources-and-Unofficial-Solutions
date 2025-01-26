@@ -14,7 +14,7 @@ public class Blob {
         return sha1(fileContent);
     }
 
-
+    /** Creates a blob and returns its id. */
     static String createBlob(File file) {
         String id = blobHash(file);
         if (!exists(id)) {
@@ -25,6 +25,7 @@ public class Blob {
         return id;
     }
 
+    /** Removes a blob file. */
     static void removeBlob(String id) {
         File bolbFile = join(BLOBS_DIR, id);
         if (bolbFile.exists()) {
@@ -32,10 +33,12 @@ public class Blob {
         }
     }
 
+    /** Returns if a blob with id exists. */
     static boolean exists(String id) {
         return join(BLOBS_DIR, id).exists();
     }
 
+    /** Gets the blob file by id. */
     static File get(String id) {
         File blobFile = join(BLOBS_DIR, id);
         if (blobFile.exists()) {
@@ -43,6 +46,13 @@ public class Blob {
         } else {
             return null;
         }
+    }
+
+    /** Returns if file has the same content as blob. */
+    static boolean equals(String blobId, File file) {
+        String blobContent = readContentsAsString(get(blobId));
+        String fileContent = readContentsAsString(file);
+        return blobContent.equals(fileContent);
     }
 
 }

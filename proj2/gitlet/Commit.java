@@ -221,6 +221,12 @@ public class Commit implements Serializable {
         return null; // This should never happen.
     }
 
+    boolean isChanged(File file) {
+        String fileName = file.getName();
+        File fileOfCommit = getFile(fileName);
+        return !readContentsAsString(fileOfCommit).equals(readContentsAsString(file));
+    }
+
     /** Displays commit message for debugging. */
     @Override
     public String toString() {

@@ -1,9 +1,9 @@
 package gitlet;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import gitlet.Utils;
-import gitlet.Commit;
+import static gitlet.Utils.*;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -90,5 +90,19 @@ public class CommitTest {
         Commit splitPoint = Commit.splitPoint(commit2, commit4);
         System.out.println(splitPoint);
         assertTrue(splitPoint.equals(commit1));
+    }
+
+    @Test
+    public void isChangedTest() {
+        Commit init = Commit.getInitialCommit();
+        File testFile = new File("testing/src/commitTest.txt");
+        writeContents(testFile, "Status1");
+        String blobId = Blob.createBlob(testFile);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("commitTest.txt", blobId);
+        Commit commit = new Commit(init, null, "test commit", map, new HashSet<>());
+        System.out.println(commit.getFile("commitTest.txt"));
+        writeContents(testFile, "Status2");
+        assertTrue(commit.isChanged(testFile));
     }
 }

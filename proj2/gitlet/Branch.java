@@ -10,6 +10,7 @@ import static gitlet.Utils.*;
  */
 public class Branch {
     static final File BRANCHES_DIR = join(Repository.GITLET_DIR, "branches");
+    static final String DEFAULT_BRANCH = "master";
 
     /** Returns branch file of branchName. Branch file don't always exist. */
     private static File getBranchFile(String branchName) {
