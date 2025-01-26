@@ -46,6 +46,8 @@ public class Repository {
         STAGING_DIR.mkdirs();
         createFile(ADDITION_FILE);
         createFile(REMOVAL_FILE);
+        writeObject(ADDITION_FILE, new HashMap<String, String>());
+        writeObject(REMOVAL_FILE, new HashSet<String>());
         Branch.set(Branch.DEFAULT_BRANCH, Commit.getInitialCommit());
         setHead(Branch.DEFAULT_BRANCH);
     }
@@ -53,6 +55,11 @@ public class Repository {
     /** Return if gitlet system exists in CWD. */
     static boolean exists() {
         return GITLET_DIR.exists();
+    }
+
+    /** Returns a file with name fileName in CWD. */
+    private static File fileOf(String fileName) {
+        return join(CWD, fileName);
     }
 
     /** Gets the commit that is pointed by head. */
@@ -88,9 +95,11 @@ public class Repository {
         writeObject(ADDITION_FILE, addition);
     }
 
-    /** Stages a file for addition, saves the file-blob pair. */
-    static void stagingAdd(String fileName, String blobId) {
+    /** Stages a file for addition, saves the file-blob pair.
+     * File of fileName not always exists, need to be checked. */
+    static void stagingAdd(String fileName) {
         HashMap<String, String> addition = getAddition();
+        String blobId = Blob.createBlob(fileOf(fileName));
         addition.put(fileName, blobId);
         writeObject(ADDITION_FILE, addition);
     }
@@ -134,9 +143,8 @@ public class Repository {
     /** Returns if a file with name fileName in the working directory is different from commit's. */
     private static boolean different(Commit commit, String fileName) {
         File commitFile = commit.getFile(fileName);
-        File workingFile = join(CWD, fileName);
         String CFContent = readContentsAsString(commitFile);
-        String WFContent = readContentsAsString(workingFile);
+        String WFContent = readContentsAsString(fileOf(fileName));
         return !CFContent.equals(WFContent);
     }
 
@@ -144,8 +152,7 @@ public class Repository {
      * Check if file is staged before this. */
     private static boolean differentFromAddition(String fileName) {
         String blobId = getAddition().get(fileName);
-        File file = join(CWD, fileName);
-        return Blob.equals(blobId, file);
+        return Blob.equals(blobId, fileOf(fileName));
     }
 
     /** Gets all modified but not staged files in the list. */
@@ -163,7 +170,7 @@ public class Repository {
              *  3. Staged for addition, but removed in working directory;
              *  4. Tracked in current commit, not staged for removal, but deleted.
              */
-            File file = join(CWD, fileName);
+            File file = fileOf(fileName);
             if ((currentCommit.contains(fileName) && currentCommit.isChanged(file) && !addition.containsKey(fileName))
             || (addition.containsKey(fileName) && differentFromAddition(fileName))
             || (addition.containsKey(fileName) && !file.exists())
@@ -192,7 +199,6 @@ public class Repository {
      * This will overwrite the file with same name in working directory. */
     static void checkout(Commit commit, String fileName) {
         File blob = commit.getFile(fileName);
-        File workingFile = join(CWD, fileName);
-        writeContents(workingFile, readContentsAsString(blob));
+        writeContents(fileOf(fileName), readContentsAsString(blob));
     }
 }
