@@ -4,10 +4,6 @@ import java.io.File;
 import java.util.*;
 
 import static gitlet.Utils.*;
-import gitlet.Commit;
-import gitlet.Branch;
-import gitlet.Blob;
-
 
 /** Represents a gitlet repository.
  * Repository class maintains staging-area and methods to access working-directory,
@@ -17,12 +13,6 @@ import gitlet.Blob;
  *  @author xianzhe233
  */
 public class Repository {
-    /**
-     *
-     * List all instance variables of the Repository class here with a useful
-     * comment above them describing what that variable represents and how that
-     * variable is used. We've provided two examples for you.
-     */
 
     /** The current working directory. */
 //    public static final File CWD = new File(System.getProperty("user.dir"));
@@ -46,8 +36,7 @@ public class Repository {
         STAGING_DIR.mkdirs();
         createFile(ADDITION_FILE);
         createFile(REMOVAL_FILE);
-        writeObject(ADDITION_FILE, new HashMap<String, String>());
-        writeObject(REMOVAL_FILE, new HashSet<String>());
+        clearStagingArea();
         Branch.set(Branch.DEFAULT_BRANCH, Commit.getInitialCommit());
         setHead(Branch.DEFAULT_BRANCH);
     }
@@ -136,12 +125,12 @@ public class Repository {
     }
 
     /** Returns if a file is in staging area. */
-    private static boolean isStaged(String fileName) {
+    static boolean isStaged(String fileName) {
         return getAddition().containsKey(fileName) || getRemoval().contains(fileName);
     }
 
     /** Returns if a file with name fileName in the working directory is different from commit's. */
-    private static boolean different(Commit commit, String fileName) {
+    static boolean different(Commit commit, String fileName) {
         File commitFile = commit.getFile(fileName);
         String CFContent = readContentsAsString(commitFile);
         String WFContent = readContentsAsString(fileOf(fileName));
@@ -152,7 +141,7 @@ public class Repository {
      * Check if file is staged before this. */
     private static boolean differentFromAddition(String fileName) {
         String blobId = getAddition().get(fileName);
-        return Blob.equals(blobId, fileOf(fileName));
+        return !Blob.equals(blobId, fileOf(fileName));
     }
 
     /** Gets all modified but not staged files in the list. */
