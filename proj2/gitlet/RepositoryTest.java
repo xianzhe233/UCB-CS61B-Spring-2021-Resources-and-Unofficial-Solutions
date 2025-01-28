@@ -22,7 +22,7 @@ public class RepositoryTest {
         initRepository();
         assertEquals(getBranch(), "master");
         Commit.log(getHead());
-        commit("First commit");
+        commit("First commit", null);
         Commit.log(getHead());
         Branch.set("newBranch",getHead());
         setHead("newBranch");
@@ -79,7 +79,7 @@ public class RepositoryTest {
         writeContents(f2, "Hello World");
         stagingAdd("f1");
         stagingAdd("f2");
-        commit("First commit");
+        commit("First commit", null);
         writeContents(f1, "Changed contents");
         f2.delete();
         assertEquals(readContentsAsString(f1), "Changed contents");

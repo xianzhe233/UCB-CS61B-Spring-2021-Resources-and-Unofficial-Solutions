@@ -1,9 +1,6 @@
 package gitlet;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static gitlet.GitletException.*;
 import static gitlet.Repository.*;
@@ -108,16 +105,13 @@ public class Command {
             throw addFileNotExistException();
         }
 
-        if (!isStagedAddition(fileName)) {
-            stagingAdd(fileName);
-        } else {
-            Commit currentCommit = getHead();
-            if (currentCommit.contains(fileName) && !currentCommit.isChanged(fileOf(fileName))) {
-                stagingRemove(fileName);
-            } else {
-                stagingAdd(fileName);
-            }
+        stagingAdd(fileName);
+
+        Commit currentCommit = getHead();
+        if (currentCommit.contains(fileName) && !currentCommit.isChanged(fileOf(fileName))) {
+            removeFromAddition(fileName);
         }
+        // If new added file's version is the same as currentCommit, cancel addition.
     }
 
     private static void commit(String[] args) throws GitletException {
@@ -133,22 +127,119 @@ public class Command {
             throw commitEmptyMessageException();
         }
 
-        Repository.commit(message);
+        Repository.commit(message, null);
     }
 
     private static void rm(String[] args) throws GitletException {
+        rm(args[0]);
+    }
+
+    private static void rm(String fileName) throws GitletException {
+        Commit currentCommit = getHead();
+        if (!isStagedAddition(fileName) && !currentCommit.contains(fileName)) {
+            throw rmNoReasonToRemoveException();
+        }
+
+        if (isStagedAddition(fileName)) {
+            removeFromAddition(fileName);
+        }
+        if (currentCommit.contains(fileName)) {
+            stagingRemove(fileName);
+            fileOf(fileName).delete();
+        }
     }
 
     private static void log() throws GitletException {
+        Commit.log(getHead());
     }
 
     private static void globalLog() throws GitletException {
+        Commit.globalLog();
     }
 
     private static void find(String[] args) throws GitletException {
+        find(args[0]);
+    }
+
+    private static void find(String message) throws GitletException {
+        List<String> commitIds = Commit.getAllCommits();
+        boolean found = false;
+        for (String commitId : commitIds) {
+            Commit commit = Commit.get(commitId);
+            if (commit.getMessage().equals(message)) {
+                System.out.println(commit.id);
+                found = true;
+            }
+        }
+        if (!found) {
+            throw findNoSameMessageException();
+        }
     }
 
     private static void status() throws GitletException {
+        List<String> WDF = workingDirectoryFiles();
+        List<String> modifiedFiles = modifiedFiles(WDF);
+        List<String> untrackedFiles = untrackedFiles(WDF);
+        HashSet<String> reunstagedFiles = new HashSet<>(modifiedFiles);
+        reunstagedFiles.addAll(untrackedFiles);
+        // branches
+        System.out.println("=== Branches ===");
+        List<String> branches = Branch.allBranches();
+        String currentBranch = getBranch();
+        System.out.println("*" + currentBranch);
+        for (String branch : branches) {
+            if (!branch.equals(currentBranch)) {
+                System.out.println(branch);
+            }
+        }
+        System.out.println();
+
+        // staged files
+        System.out.println("=== Staged Files ===");
+        ArrayList<String> stagedFiles = new ArrayList<>(getAddition().keySet());
+        Collections.sort(stagedFiles);
+        for (String file : stagedFiles) {
+            if (reunstagedFiles.contains(file)) {
+                continue;
+            }
+            System.out.println(file);
+        }
+        System.out.println();
+
+        // removed files
+        System.out.println("=== Removed Files ===");
+        ArrayList<String> removedFiles = new ArrayList<>(getRemoval());
+        Collections.sort(removedFiles);
+        for (String file : removedFiles) {
+            if (reunstagedFiles.contains(file)) {
+                continue;
+            }
+            System.out.println(file);
+        }
+        System.out.println();
+
+
+        // modifications not staged for commit
+        System.out.println("=== Modifications Not Staged For Commit ===");
+        Collections.sort(modifiedFiles);
+        for (String file : modifiedFiles) {
+            String afterName;
+            if (!fileOf(file).exists()) {
+                afterName = " (deleted)";
+            } else {
+                afterName = " (modified)";
+            }
+            System.out.println(file + afterName);
+        }
+        System.out.println();
+
+        // untracked files
+        System.out.println("=== Untracked Files ===");
+        Collections.sort(untrackedFiles);
+        for (String file : untrackedFiles) {
+            System.out.println(file);
+        }
+        System.out.println();
     }
 
     private static void checkout(String[] args) throws GitletException {

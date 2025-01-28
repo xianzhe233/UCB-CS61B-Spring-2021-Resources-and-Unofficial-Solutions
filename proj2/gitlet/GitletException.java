@@ -48,4 +48,12 @@ class GitletException extends RuntimeException {
     static GitletException commitEmptyMessageException() {
         return new GitletException("Please enter a commit message.");
     }
+
+    static GitletException rmNoReasonToRemoveException() {
+        return new GitletException("No reason to remove the file.");
+    }
+
+    static GitletException findNoSameMessageException() {
+        return new GitletException("Found no commit with that message.");
+    }
 }

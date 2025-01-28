@@ -1,10 +1,7 @@
 package gitlet;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static gitlet.Utils.*;
 
@@ -42,7 +39,7 @@ public class Repository {
     /**
      * build gitlet system in CWD.
      */
-    static void initRepository() {
+    public static void initRepository() {
         GITLET_DIR.mkdirs();
         Blob.BLOBS_DIR.mkdirs();
         Branch.BRANCHES_DIR.mkdirs();
@@ -102,20 +99,29 @@ public class Repository {
      * Returns if the staging area is empty.
      */
     static boolean isStagingAreaEmpty() {
-        return getAddition().isEmpty() && getRemoval().isEmpty();
+        HashMap<String, String> addition = getAddition();
+        HashSet<String> removal = getRemoval();
+        List<String> allFiles = workingDirectoryFiles();
+        HashSet<String> modified = new HashSet<>(modifiedFiles(allFiles));
+        HashSet<String> untracked = new HashSet<>(untrackedFiles(allFiles));
+        addition.keySet().removeAll(untracked);
+        addition.keySet().removeAll(removal);
+        removal.removeAll(untracked);
+        modified.removeAll(untracked);
+        return addition.isEmpty() && removal.isEmpty();
     }
 
     /**
      * Gets the HashMap of addition information from file.
      */
-    private static HashMap<String, String> getAddition() {
+    static HashMap<String, String> getAddition() {
         return readObject(ADDITION_FILE, HashMap.class);
     }
 
     /**
      * Gets the HashSet of removal information from file.
      */
-    private static HashSet<String> getRemoval() {
+    static HashSet<String> getRemoval() {
         return readObject(REMOVAL_FILE, HashSet.class);
     }
 
@@ -218,6 +224,7 @@ public class Repository {
         Commit currentCommit = getHead();
         HashSet<String> allFiles = new HashSet<>(files);
         allFiles.addAll(addition.keySet());
+        allFiles.addAll(currentCommit.files());
         List<String> modifiedFiles = new LinkedList<>();
         for (String fileName : allFiles) {
             /** Modifications Not Staged:
@@ -227,10 +234,11 @@ public class Repository {
              *  4. Tracked in current commit, not staged for removal, but deleted.
              */
             File file = fileOf(fileName);
-            if ((currentCommit.contains(fileName) && currentCommit.isChanged(file) && !addition.containsKey(fileName))
-                    || (addition.containsKey(fileName) && differentFromAddition(fileName))
+            if ((currentCommit.contains(fileName) && file.exists() && currentCommit.isChanged(file) && !addition.containsKey(fileName))
                     || (addition.containsKey(fileName) && !file.exists())
-                    || (currentCommit.contains(fileName) && !removal.contains(fileName) && !file.exists())) {
+                    || (currentCommit.contains(fileName) && !removal.contains(fileName) && !file.exists())
+                    || (addition.containsKey(fileName) && file.exists() && differentFromAddition(fileName))
+            ) {
                 modifiedFiles.add(fileName);
             }
         }
@@ -248,8 +256,8 @@ public class Repository {
     /**
      * An integrated commit method.
      */
-    static void commit(String message) {
-        Commit newCommit = new Commit(getHead(), null, message, getAddition(), getRemoval());
+    static void commit(String message, Commit merged) {
+        Commit newCommit = new Commit(getHead(), merged, message, getAddition(), getRemoval());
         clearStagingArea();
         Branch.set(getBranch(), newCommit);
     }

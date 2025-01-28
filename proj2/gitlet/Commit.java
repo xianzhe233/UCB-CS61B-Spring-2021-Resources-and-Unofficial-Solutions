@@ -76,6 +76,10 @@ public class Commit implements Serializable {
         return new Date().getTime();
     }
 
+    String getMessage() {
+        return message;
+    }
+
     /**
      * Converts a timestamp to formated date message string.
      */
@@ -187,7 +191,7 @@ public class Commit implements Serializable {
     /**
      * Gets all commits from gitlet repository.
      */
-    private static List<String> getAllCommits() {
+    static List<String> getAllCommits() {
         File[] dirs = COMMITS_DIR.listFiles();
         List<String> commits = new ArrayList<>();
         for (File dir : dirs) {
@@ -252,18 +256,26 @@ public class Commit implements Serializable {
     private void print() {
         System.out.println("===");
         System.out.println("commit " + this.id);
+        if (mergedParent != null) {
+            System.out.println("Merge: " + parent.substring(0, 7) + ' ' + mergedParent.substring(0, 7));
+        }
         System.out.println("Date: " + dateOf(this.timestamp));
         System.out.println(this.message);
         System.out.println();
     }
 
-    /**
-     *
-     */
     boolean isChanged(File file) {
         String fileName = file.getName();
         File fileOfCommit = getFile(fileName);
         return !readContentsAsString(fileOfCommit).equals(readContentsAsString(file));
+    }
+
+    /**
+     * Gets all files that are contained in this commit.
+     */
+    HashSet<String> files() {
+        HashSet<String> files = new HashSet<>(fileMap.keySet());
+        return files;
     }
 
     /**
