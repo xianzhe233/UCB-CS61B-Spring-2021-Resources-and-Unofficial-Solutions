@@ -1,20 +1,26 @@
 package gitlet;
+
 import java.io.File;
-import java.io.IOException;
 
 import static gitlet.Utils.*;
 
 public class Blob {
-    /** The blobs directory. */
+    /**
+     * The blobs directory.
+     */
     static final File BLOBS_DIR = join(Repository.GITLET_DIR, "blobs");
 
-    /** Returns SHA-1 id of file. */
+    /**
+     * Returns SHA-1 id of file.
+     */
     static String blobHash(File file) {
         String fileContent = readContentsAsString(file);
         return sha1(fileContent);
     }
 
-    /** Creates a blob and returns its id. */
+    /**
+     * Creates a blob and returns its id.
+     */
     static String createBlob(File file) {
         String id = blobHash(file);
         if (!exists(id)) {
@@ -25,7 +31,9 @@ public class Blob {
         return id;
     }
 
-    /** Removes a blob file. */
+    /**
+     * Removes a blob file.
+     */
     static void removeBlob(String id) {
         File bolbFile = join(BLOBS_DIR, id);
         if (bolbFile.exists()) {
@@ -33,12 +41,16 @@ public class Blob {
         }
     }
 
-    /** Returns if a blob with id exists. */
+    /**
+     * Returns if a blob with id exists.
+     */
     static boolean exists(String id) {
         return join(BLOBS_DIR, id).exists();
     }
 
-    /** Gets the blob file by id. */
+    /**
+     * Gets the blob file by id.
+     */
     static File get(String id) {
         File blobFile = join(BLOBS_DIR, id);
         if (blobFile.exists()) {
@@ -48,7 +60,9 @@ public class Blob {
         }
     }
 
-    /** Returns if file has the same content as blob. */
+    /**
+     * Returns if file has the same content as blob.
+     */
     static boolean equals(String blobId, File file) {
         String blobContent = readContentsAsString(get(blobId));
         String fileContent = readContentsAsString(file);
