@@ -1,9 +1,11 @@
 package gitlet;
 
+import java.io.File;
 import java.util.*;
 
 import static gitlet.GitletException.*;
 import static gitlet.Repository.*;
+import static gitlet.Utils.*;
 
 /**
  * Represents commands of Gitlet.
@@ -101,7 +103,7 @@ public class Command {
     }
 
     private static void add(String fileName) throws GitletException {
-        if(!isFileExist(fileName)) {
+        if (!isFileExist(fileName)) {
             throw addFileNotExistException();
         }
 
@@ -243,12 +245,115 @@ public class Command {
     }
 
     private static void checkout(String[] args) throws GitletException {
+        switch (args.length) {
+            case 1:
+                checkout(args[0]);
+                break;
+            case 2:
+                checkout(args[0], args[1]);
+                break;
+            case 3:
+                checkout(args[0], args[1], args[2]);
+                break;
+        }
+    }
+
+    /**
+     * Copies f1's content to f2.
+     * former -> latter
+     */
+    private static void copy(File f1, File f2) {
+        writeContents(f2, readContentsAsString(f1));
+    }
+
+    private static void checkout(String dash, String fileName) throws GitletException {
+        if (!dash.equals("--")) {
+            throw OperandsIncorrectException();
+        }
+        if (!getHead().contains(fileName)) {
+            throw checkoutFileNotExistException();
+        }
+
+        File fileOfHead = getHead().getFile(fileName);
+        copy(fileOfHead, fileOf(fileName));
+    }
+
+    private static void checkout(String commitId, String dash, String fileName) throws GitletException {
+        if (!dash.equals("--")) {
+            throw OperandsIncorrectException();
+        }
+        if (!Commit.exists(commitId)) {
+            throw checkoutCommitNotExistException();
+        }
+        Commit commit = Commit.get(commitId);
+        if (!commit.contains(fileName)) {
+            throw checkoutFileNotExistException();
+        }
+
+        File fileOfCommit = commit.getFile(fileName);
+        copy(fileOfCommit, fileOf(fileName));
+    }
+
+    private static void checkout(String branchName) throws GitletException {
+        if (!Branch.exists(branchName)) {
+            throw checkoutBranchNotExistException();
+        }
+        if (getBranch().equals(branchName)) {
+            throw checkoutCurrentBranchException();
+        }
+
+        Commit branchCommit = Branch.get(branchName);
+        Commit currentCommit = getHead();
+        setHead(branchName);
+        List<String> untrackedFiles = untrackedFiles(workingDirectoryFiles());
+
+        for (String fileName : untrackedFiles) {
+            if (branchCommit.contains(fileName)) {
+                throw checkoutDangerousException();
+            }
+        }
+
+        for (String fileName : currentCommit.files()) {
+            if (!branchCommit.contains(fileName)) {
+                fileOf(fileName).delete();
+            }
+        }
+
+        for(String fileName : branchCommit.files()) {
+            if (!fileOf(fileName).exists()) {
+                createFile(fileOf(fileName));
+            }
+            copy(branchCommit.getFile(fileName), fileOf(fileName));
+        }
+
+        clearStagingArea();
     }
 
     private static void branch(String[] args) throws GitletException {
+        branch(args[0]);
+    }
+
+    private static void branch(String branchName) throws GitletException {
+        if (!Branch.exists(branchName)) {
+            throw branchAlreadyExistsException();
+        }
+
+        Branch.set(branchName, getHead());
     }
 
     private static void rmBranch(String[] args) throws GitletException {
+        rmBranch(args[0]);
+    }
+
+    private static void rmBranch(String branchName) throws GitletException {
+        if (!Branch.exists(branchName)) {
+            throw rmBranchNotExistException();
+        }
+        if (branchName.equals(getBranch())) {
+            throw rmBranchRemoveCurrentBranchException();
+        }
+
+        Branch.remove(branchName);
     }
 
     private static void reset(String[] args) throws GitletException {

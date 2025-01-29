@@ -139,7 +139,8 @@ public class CommandTest {
         input("rm", "u2");
         file("u2", "u2");
 
+//        input("status");
+        input("commit", "still can commit");
         input("status");
-
     }
 }

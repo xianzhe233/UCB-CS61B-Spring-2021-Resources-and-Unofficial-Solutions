@@ -56,4 +56,36 @@ class GitletException extends RuntimeException {
     static GitletException findNoSameMessageException() {
         return new GitletException("Found no commit with that message.");
     }
+
+    static GitletException checkoutCommitNotExistException() {
+        return new GitletException("No commit with that id exists.");
+    }
+
+    static GitletException checkoutFileNotExistException() {
+        return new GitletException("File does not exist in that commit.");
+    }
+
+    static GitletException checkoutBranchNotExistException() {
+        return new GitletException("No such branch exists.");
+    }
+
+    static GitletException checkoutCurrentBranchException() {
+        return new GitletException("No need to checkout the current branch.");
+    }
+
+    static GitletException checkoutDangerousException() {
+        return new GitletException("There is an untracked file in the way; delete it, or add and commit it first.");
+    }
+
+    static GitletException branchAlreadyExistsException() {
+        return new GitletException("A branch with that name already exists.");
+    }
+
+    static GitletException rmBranchNotExistException() {
+        return new GitletException("A branch with that name does not exist.");
+    }
+
+    static GitletException rmBranchRemoveCurrentBranchException() {
+        return new GitletException("Cannot remove the current branch.");
+    }
 }
