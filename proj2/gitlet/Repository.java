@@ -101,13 +101,6 @@ public class Repository {
     static boolean isStagingAreaEmpty() {
         HashMap<String, String> addition = getAddition();
         HashSet<String> removal = getRemoval();
-        List<String> allFiles = workingDirectoryFiles();
-        HashSet<String> modified = new HashSet<>(modifiedFiles(allFiles));
-        HashSet<String> untracked = new HashSet<>(untrackedFiles(allFiles));
-        addition.keySet().removeAll(untracked);
-        addition.keySet().removeAll(removal);
-        removal.removeAll(untracked);
-        modified.removeAll(untracked);
         return addition.isEmpty() && removal.isEmpty();
     }
 
@@ -175,7 +168,7 @@ public class Repository {
              *  2. Staged for removal now, but recreated (still in working directory).
              */
             if ((!currentCommit.contains(fileName) && !addition.containsKey(fileName))
-                    || removal.contains(fileName)) {
+                    || removal.contains(fileName) && fileOf(fileName).exists()) {
                 untrackedFiles.add(fileName);
             }
         }
