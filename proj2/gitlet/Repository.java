@@ -203,7 +203,7 @@ public class Repository {
      * Returns if a file in working directory is different from staged version.
      * Check if file is staged before this.
      */
-    private static boolean differentFromAddition(String fileName) {
+    static boolean differentFromAddition(String fileName) {
         String blobId = getAddition().get(fileName);
         return !Blob.equals(blobId, fileOf(fileName));
     }

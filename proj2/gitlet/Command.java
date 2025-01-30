@@ -182,8 +182,6 @@ public class Command {
         List<String> WDF = workingDirectoryFiles();
         List<String> modifiedFiles = modifiedFiles(WDF);
         List<String> untrackedFiles = untrackedFiles(WDF);
-        HashSet<String> reunstagedFiles = new HashSet<>(modifiedFiles);
-        reunstagedFiles.addAll(untrackedFiles);
         // branches
         System.out.println("=== Branches ===");
         List<String> branches = Branch.allBranches();
@@ -200,11 +198,11 @@ public class Command {
         System.out.println("=== Staged Files ===");
         ArrayList<String> stagedFiles = new ArrayList<>(getAddition().keySet());
         Collections.sort(stagedFiles);
-        for (String file : stagedFiles) {
-            if (reunstagedFiles.contains(file)) {
+        for (String fileName : stagedFiles) {
+            if ( !fileOf(fileName).exists() || differentFromAddition(fileName)) {
                 continue;
             }
-            System.out.println(file);
+            System.out.println(fileName);
         }
         System.out.println();
 
@@ -212,34 +210,33 @@ public class Command {
         System.out.println("=== Removed Files ===");
         ArrayList<String> removedFiles = new ArrayList<>(getRemoval());
         Collections.sort(removedFiles);
-        for (String file : removedFiles) {
-            if (reunstagedFiles.contains(file)) {
+        for (String fileName : removedFiles) {
+            if (fileOf(fileName).exists()) {
                 continue;
             }
-            System.out.println(file);
+            System.out.println(fileName);
         }
         System.out.println();
-
 
         // modifications not staged for commit
         System.out.println("=== Modifications Not Staged For Commit ===");
         Collections.sort(modifiedFiles);
-        for (String file : modifiedFiles) {
+        for (String fileName : modifiedFiles) {
             String afterName;
-            if (!fileOf(file).exists()) {
+            if (!fileOf(fileName).exists()) {
                 afterName = " (deleted)";
             } else {
                 afterName = " (modified)";
             }
-            System.out.println(file + afterName);
+            System.out.println(fileName + afterName);
         }
         System.out.println();
 
         // untracked files
         System.out.println("=== Untracked Files ===");
         Collections.sort(untrackedFiles);
-        for (String file : untrackedFiles) {
-            System.out.println(file);
+        for (String fileName : untrackedFiles) {
+            System.out.println(fileName);
         }
         System.out.println();
     }
@@ -304,7 +301,6 @@ public class Command {
 
         Commit branchCommit = Branch.get(branchName);
         Commit currentCommit = getHead();
-        setHead(branchName);
         List<String> untrackedFiles = untrackedFiles(workingDirectoryFiles());
 
         for (String fileName : untrackedFiles) {
@@ -312,6 +308,8 @@ public class Command {
                 throw checkoutDangerousException();
             }
         }
+
+        setHead(branchName);
 
         for (String fileName : currentCommit.files()) {
             if (!branchCommit.contains(fileName)) {
@@ -334,7 +332,7 @@ public class Command {
     }
 
     private static void branch(String branchName) throws GitletException {
-        if (!Branch.exists(branchName)) {
+        if (Branch.exists(branchName)) {
             throw branchAlreadyExistsException();
         }
 
