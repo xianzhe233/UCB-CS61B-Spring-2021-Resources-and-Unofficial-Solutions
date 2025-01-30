@@ -6,7 +6,6 @@ package gitlet;
  */
 class GitletException extends RuntimeException {
 
-
     /** A GitletException with no message. */
     GitletException() {
         super();
@@ -88,4 +87,34 @@ class GitletException extends RuntimeException {
     static GitletException rmBranchRemoveCurrentBranchException() {
         return new GitletException("Cannot remove the current branch.");
     }
+
+    static GitletException resetCommitNotExistException() {
+        return new GitletException("No commit with that id exists.");
+    }
+
+    /** These two are not exceptions, strictly. But for sake of code structure purity, I do this. */
+    static GitletException mergeGivenBranchIsAncestorMessage() {
+        return new GitletException("Given branch is an ancestor of the current branch.");
+    }
+
+    static GitletException mergeCurrentBranchIsAncestorMessage() {
+        return new GitletException("Current branch fast-forwarded.");
+    }
+
+    static GitletException mergeStagingAreaNotClearException() {
+        return new GitletException("You have uncommitted changes.");
+    }
+
+    static GitletException mergeBranchNotExistException() {
+        return new GitletException("A branch with that name does not exist.");
+    }
+
+    static GitletException mergeCanNotMergeItselfException() {
+        return new GitletException("Cannot merge a branch with itself.");
+    }
+
+    static GitletException mergeDangerousException() {
+        return new GitletException("There is an untracked file in the way; delete it, or add and commit it first.");
+    }
+
 }

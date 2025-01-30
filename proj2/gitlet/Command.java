@@ -132,6 +132,17 @@ public class Command {
         Repository.commit(message, null);
     }
 
+    /**
+     * An integrated commit method for merged commit operation.
+     */
+    private static void mergedCommit(Commit mergedCommit, String message) throws GitletException {
+        if (isStagingAreaEmpty()) {
+            throw commitNoStagedFileException();
+        }
+
+        Repository.commit(message, mergedCommit);
+    }
+
     private static void rm(String[] args) throws GitletException {
         rm(args[0]);
     }
@@ -271,8 +282,7 @@ public class Command {
             throw checkoutFileNotExistException();
         }
 
-        File fileOfHead = getHead().getFile(fileName);
-        copy(fileOfHead, fileOf(fileName));
+        Repository.checkout(getHead(), fileName);
     }
 
     private static void checkout(String commitId, String dash, String fileName) throws GitletException {
@@ -287,8 +297,7 @@ public class Command {
             throw checkoutFileNotExistException();
         }
 
-        File fileOfCommit = commit.getFile(fileName);
-        copy(fileOfCommit, fileOf(fileName));
+        Repository.checkout(Commit.get(commitId), fileName);
     }
 
     private static void checkout(String branchName) throws GitletException {
@@ -321,7 +330,7 @@ public class Command {
             if (!fileOf(fileName).exists()) {
                 createFile(fileOf(fileName));
             }
-            copy(branchCommit.getFile(fileName), fileOf(fileName));
+            Repository.checkout(branchCommit, fileName);
         }
 
         clearStagingArea();
@@ -355,8 +364,49 @@ public class Command {
     }
 
     private static void reset(String[] args) throws GitletException {
+        reset(args[0]);
+    }
+
+    private static void reset(String commitId) throws GitletException {
+        if (!Commit.exists(commitId)) {
+            throw resetCommitNotExistException();
+        }
+
+        Commit commit = Commit.get(commitId);
+        Commit currentCommit = getHead();
+
+        for (String fileName : commit.files()) {
+            Repository.checkout(commit, fileName);
+        }
+
+        for (String fileName : currentCommit.files()) {
+            if (!commit.contains(fileName)) {
+                fileOf(fileName).delete();
+            }
+        }
+
+        Branch.set(getBranch(), commitId);
     }
 
     private static void merge(String[] args) throws GitletException {
+        if (!isStagingAreaEmpty()) {
+            throw mergeStagingAreaNotClearException();
+        }
+
+        merge(args[0]);
+    }
+
+    private static void merge(String branchName) throws GitletException {
+        if (!Branch.exists(branchName)) {
+            throw mergeBranchNotExistException();
+        }
+        if (branchName.equals(getBranch())) {
+            throw mergeCanNotMergeItselfException();
+        }
+
+        String currentBranch = getBranch();
+        Commit currentCommit = getHead();
+        Commit mergedCommit = Commit.get(branchName);
+
     }
 }
