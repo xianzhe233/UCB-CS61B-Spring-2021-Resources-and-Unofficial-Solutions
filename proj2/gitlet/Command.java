@@ -514,6 +514,10 @@ public class Command {
 
         String commitMessage = mergeMessage(currentBranch, branchName);
         mergedCommit(mergedCommit, commitMessage);
+
+        if (conflictExists) {
+            throw mergeHasConflictMessage();
+        }
     }
 
     private static String mergeFileContent(Commit currentCommit, Commit mergedCommit, String fileName) {
