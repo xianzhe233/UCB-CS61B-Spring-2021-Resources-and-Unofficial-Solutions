@@ -136,12 +136,12 @@ public class Command {
     /**
      * An integrated commit method for merged commit operation.
      */
-    private static void mergedCommit(Commit mergedCommit, String message) throws GitletException {
+    private static void mergedCommit(String branchName, String message) throws GitletException {
         if (isStagingAreaEmpty()) {
             throw commitNoStagedFileException();
         }
 
-        Repository.commit(message, mergedCommit);
+        Repository.commit(message, branchName);
     }
 
     private static void rm(String[] args) throws GitletException {
@@ -521,7 +521,7 @@ public class Command {
         }
 
         String commitMessage = mergeMessage(currentBranch, branchName);
-        mergedCommit(mergedCommit, commitMessage);
+        mergedCommit(branchName, commitMessage);
 
         if (conflictExists) {
             throw mergeHasConflictMessage();

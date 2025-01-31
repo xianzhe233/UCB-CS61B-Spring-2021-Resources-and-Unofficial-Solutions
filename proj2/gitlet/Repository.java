@@ -261,10 +261,14 @@ public class Repository {
     /**
      * An integrated commit method.
      */
-    static void commit(String message, Commit merged) {
+    static void commit(String message, String mergedBranch) {
+        Commit merged = mergedBranch == null ? null : Branch.get(mergedBranch);
         Commit newCommit = new Commit(getHead(), merged, message, getAddition(), getRemoval());
         clearStagingArea();
         Branch.set(getBranch(), newCommit);
+        if (merged != null) {
+            Branch.set(mergedBranch, newCommit);
+        }
     }
 
     /**
