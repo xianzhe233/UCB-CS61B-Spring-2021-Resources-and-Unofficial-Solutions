@@ -311,13 +311,8 @@ public class Command {
 
         Commit branchCommit = Branch.get(branchName);
         Commit currentCommit = getHead();
-        List<String> untrackedFiles = untrackedFiles(workingDirectoryFiles());
 
-        for (String fileName : untrackedFiles) {
-            if (branchCommit.contains(fileName)) {
-                throw checkoutDangerousException();
-            }
-        }
+        untrackedCheck(branchCommit, checkoutDangerousException());
 
         setHead(branchName);
 
@@ -368,6 +363,19 @@ public class Command {
         reset(args[0]);
     }
 
+    /**
+     * Throws given exception when an untracked file would be
+     * overwritten by checking out commit.
+     */
+    private static void untrackedCheck(Commit commit, GitletException e) throws GitletException {
+        List<String> untrackedFiles = untrackedFiles(workingDirectoryFiles());
+        for (String fileName : untrackedFiles) {
+            if (commit.contains(fileName)) {
+                throw e;
+            }
+        }
+    }
+
     private static void reset(String commitId) throws GitletException {
         if (!Commit.exists(commitId)) {
             throw resetCommitNotExistException();
@@ -376,12 +384,7 @@ public class Command {
         Commit commit = Commit.get(commitId);
         Commit currentCommit = getHead();
 
-        List<String> untrackedFiles = untrackedFiles(workingDirectoryFiles());
-        for (String fileName : untrackedFiles) {
-            if (commit.contains(fileName)) {
-                throw resetDangerousException();
-            }
-        }
+        untrackedCheck(commit, resetDangerousException());
 
         for (String fileName : commit.files()) {
             Repository.checkout(commit, fileName);
@@ -394,6 +397,7 @@ public class Command {
         }
 
         Branch.set(getBranch(), commit);
+        clearStagingArea();
     }
 
     private static void merge(String[] args) throws GitletException {
