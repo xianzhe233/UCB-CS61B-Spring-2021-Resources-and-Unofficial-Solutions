@@ -386,7 +386,7 @@ public class Command {
             }
         }
 
-        Branch.set(getBranch(), commitId);
+        Branch.set(getBranch(), commit);
     }
 
     private static void merge(String[] args) throws GitletException {
