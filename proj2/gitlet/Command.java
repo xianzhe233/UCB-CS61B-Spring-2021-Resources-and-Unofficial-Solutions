@@ -112,6 +112,7 @@ public class Command {
         Commit currentCommit = getHead();
         if (currentCommit.contains(fileName) && !currentCommit.isChanged(fileOf(fileName))) {
             removeFromAddition(fileName);
+            removeFromRemoval(fileName);
         }
         // If new added file's version is the same as currentCommit, cancel addition.
     }
@@ -210,7 +211,7 @@ public class Command {
         ArrayList<String> stagedFiles = new ArrayList<>(getAddition().keySet());
         Collections.sort(stagedFiles);
         for (String fileName : stagedFiles) {
-            if ( !fileOf(fileName).exists() || differentFromAddition(fileName)) {
+            if (!fileOf(fileName).exists() || differentFromAddition(fileName)) {
                 continue;
             }
             System.out.println(fileName);
@@ -326,7 +327,7 @@ public class Command {
             }
         }
 
-        for(String fileName : branchCommit.files()) {
+        for (String fileName : branchCommit.files()) {
             if (!fileOf(fileName).exists()) {
                 createFile(fileOf(fileName));
             }
@@ -406,7 +407,7 @@ public class Command {
 
         String currentBranch = getBranch();
         Commit currentCommit = getHead();
-        Commit mergedCommit = Commit.get(branchName);
+        Commit mergedCommit = Branch.get(branchName);
         Commit splitPoint = Commit.splitPoint(currentCommit, mergedCommit);
 
         if (splitPoint.equals(mergedCommit)) {
@@ -425,8 +426,8 @@ public class Command {
          */
         for (String fileName : splitPoint.files()) {
             if (currentCommit.contains(fileName) && mergedCommit.contains(fileName)
-            && Commit.different(splitPoint, mergedCommit, fileName)
-            && !Commit.different(splitPoint, currentCommit, fileName)) {
+                    && Commit.different(splitPoint, mergedCommit, fileName)
+                    && !Commit.different(splitPoint, currentCommit, fileName)) {
                 Repository.checkout(mergedCommit, fileName);
                 stagingAdd(fileName);
             }
@@ -459,7 +460,7 @@ public class Command {
          */
         for (String fileName : splitPoint.files()) {
             if (currentCommit.contains(fileName) && !Commit.different(splitPoint, currentCommit, fileName)
-            && !mergedCommit.contains(fileName)) {
+                    && !mergedCommit.contains(fileName)) {
                 rm(fileName);
             }
         }
@@ -490,8 +491,8 @@ public class Command {
                 }
                 if (!(currentExists && mergedExists)
                         && (
-                                (currentExists && Commit.different(splitPoint, currentCommit, fileName))
-                            || (mergedExists && Commit.different(splitPoint, mergedCommit, fileName))
+                        (currentExists && Commit.different(splitPoint, currentCommit, fileName))
+                                || (mergedExists && Commit.different(splitPoint, mergedCommit, fileName))
                 )) {
                     conflict = true;
                 }

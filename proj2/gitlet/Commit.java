@@ -29,13 +29,12 @@ public class Commit implements Serializable {
     static final File COMMITS_DIR = join(Repository.GITLET_DIR, "commits");
     static final long INITIAL_TIMESTAMP = 0;
     static final String INITIAL_ID = "2bca61509088a86ded75abaf7eb7ff15f331fad6";
-
-    String id;
-    String parent = null; // first parent
-    String mergedParent = null; // merged parent (if exists)
     private final long timestamp;
     private final String message;
     private final HashMap<String, String> fileMap; // Maps file names to blobs
+    String id;
+    String parent = null; // first parent
+    String mergedParent = null; // merged parent (if exists)
 
     /**
      * Creates a commit object and save it.
@@ -74,10 +73,6 @@ public class Commit implements Serializable {
      */
     static long getTimeStamp() {
         return new Date().getTime();
-    }
-
-    String getMessage() {
-        return message;
     }
 
     /**
@@ -228,6 +223,19 @@ public class Commit implements Serializable {
     }
 
     /**
+     * Returns if the file is different at commit1 and commit2.
+     */
+    static boolean different(Commit c1, Commit c2, String fileName) {
+        File f1 = c1.getFile(fileName);
+        File f2 = c2.getFile(fileName);
+        return !readContentsAsString(f1).equals(readContentsAsString(f2));
+    }
+
+    String getMessage() {
+        return message;
+    }
+
+    /**
      * Returns if this commit contains a file with fileName.
      */
     boolean contains(String fileName) {
@@ -276,15 +284,6 @@ public class Commit implements Serializable {
     HashSet<String> files() {
         HashSet<String> files = new HashSet<>(fileMap.keySet());
         return files;
-    }
-
-    /**
-     * Returns if the file is different at commit1 and commit2.
-     */
-    static boolean different(Commit c1, Commit c2, String fileName) {
-        File f1 = c1.getFile(fileName);
-        File f2 = c2.getFile(fileName);
-        return !readContentsAsString(f1).equals(readContentsAsString(f2));
     }
 
     /**

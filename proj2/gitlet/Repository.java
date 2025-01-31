@@ -1,7 +1,10 @@
 package gitlet;
 
 import java.io.File;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 import static gitlet.Utils.*;
 
@@ -18,9 +21,9 @@ public class Repository {
     /**
      * The current working directory.
      */
-    public static final File CWD = new File(System.getProperty("user.dir"));
+//    public static final File CWD = new File(System.getProperty("user.dir"));
 // TODO: Change CWD back finally.
-//    public static final File CWD = new File("playground");
+    public static final File CWD = new File("playground");
     /**
      * The .gitlet directory.
      */
@@ -125,6 +128,15 @@ public class Repository {
         HashMap<String, String> addition = getAddition();
         addition.remove(fileName);
         writeObject(ADDITION_FILE, addition);
+    }
+
+    /**
+     * Removes a specific file from removal stage.
+     */
+    static void removeFromRemoval(String fileName) {
+        HashSet<String> removal = getRemoval();
+        removal.remove(fileName);
+        writeObject(REMOVAL_FILE, removal);
     }
 
     /**
