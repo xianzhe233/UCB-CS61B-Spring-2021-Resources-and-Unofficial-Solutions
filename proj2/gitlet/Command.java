@@ -421,6 +421,8 @@ public class Command {
         Commit mergedCommit = Branch.get(branchName);
         Commit splitPoint = Commit.splitPoint(currentCommit, mergedCommit);
 
+        untrackedCheck(mergedCommit, mergeDangerousException());
+
         if (splitPoint.equals(mergedCommit)) {
             throw mergeGivenBranchIsAncestorMessage();
         }
