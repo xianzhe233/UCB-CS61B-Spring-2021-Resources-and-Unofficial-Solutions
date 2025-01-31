@@ -117,4 +117,8 @@ class GitletException extends RuntimeException {
         return new GitletException("There is an untracked file in the way; delete it, or add and commit it first.");
     }
 
+    static GitletException mergeHasConflictMessage() {
+        return new GitletException("Encountered a merge conflict.");
+    }
+
 }

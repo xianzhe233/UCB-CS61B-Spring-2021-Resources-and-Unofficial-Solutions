@@ -279,7 +279,17 @@ public class Commit implements Serializable {
     }
 
     /**
-     * Displays commit message for debugging.
+     * Returns if the file is different at commit1 and commit2.
+     */
+    static boolean different(Commit c1, Commit c2, String fileName) {
+        File f1 = c1.getFile(fileName);
+        File f2 = c2.getFile(fileName);
+        return !readContentsAsString(f1).equals(readContentsAsString(f2));
+    }
+
+    /**
+     * Displays commit message for debu
+     * gging.
      */
     @Override
     public String toString() {
