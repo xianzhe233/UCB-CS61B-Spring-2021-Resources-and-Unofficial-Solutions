@@ -376,6 +376,13 @@ public class Command {
         Commit commit = Commit.get(commitId);
         Commit currentCommit = getHead();
 
+        List<String> untrackedFiles = untrackedFiles(workingDirectoryFiles());
+        for (String fileName : untrackedFiles) {
+            if (commit.contains(fileName)) {
+                throw resetDangerousException();
+            }
+        }
+
         for (String fileName : commit.files()) {
             Repository.checkout(commit, fileName);
         }

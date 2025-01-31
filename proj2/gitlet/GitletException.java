@@ -98,6 +98,10 @@ class GitletException extends RuntimeException {
         return new GitletException("No commit with that id exists.");
     }
 
+    static GitletException resetDangerousException() {
+        return new GitletException("There is an untracked file in the way; delete it, or add and commit it first.");
+    }
+
     /**
      * These two are not exceptions, strictly. But for sake of code structure purity, I do this.
      */
