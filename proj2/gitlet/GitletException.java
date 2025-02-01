@@ -39,7 +39,8 @@ class GitletException extends RuntimeException {
     }
 
     static GitletException initGitletAlreadyExistsException() {
-        return new GitletException("A Gitlet version-control system already exists in the current directory.");
+        return new GitletException("A Gitlet version-control system already"
+                + " exists in the current directory.");
     }
 
     static GitletException addFileNotExistException() {
@@ -79,7 +80,8 @@ class GitletException extends RuntimeException {
     }
 
     static GitletException checkoutDangerousException() {
-        return new GitletException("There is an untracked file in the way; delete it, or add and commit it first.");
+        return new GitletException("There is an untracked file in the way;"
+                + " delete it, or add and commit it first.");
     }
 
     static GitletException branchAlreadyExistsException() {
@@ -99,7 +101,8 @@ class GitletException extends RuntimeException {
     }
 
     static GitletException resetDangerousException() {
-        return new GitletException("There is an untracked file in the way; delete it, or add and commit it first.");
+        return new GitletException("There is an untracked file in the way;"
+                + " delete it, or add and commit it first.");
     }
 
     /**
@@ -126,7 +129,8 @@ class GitletException extends RuntimeException {
     }
 
     static GitletException mergeDangerousException() {
-        return new GitletException("There is an untracked file in the way; delete it, or add and commit it first.");
+        return new GitletException("There is an untracked file in the way;"
+                + " delete it, or add and commit it first.");
     }
 
     static GitletException mergeHasConflictMessage() {

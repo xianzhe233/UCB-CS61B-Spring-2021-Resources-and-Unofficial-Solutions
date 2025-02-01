@@ -291,7 +291,8 @@ public class Command {
         Repository.checkout(getHead(), fileName);
     }
 
-    private static void checkout(String commitId, String dash, String fileName) throws GitletException {
+    private static void checkout(String commitId, String dash, String fileName)
+            throws GitletException {
         if (!dash.equals("--")) {
             throw operandsIncorrectException();
         }
@@ -483,7 +484,8 @@ public class Command {
             }
         }
         for (String fileName : splitPoint.files()) {
-            if (currentCommit.contains(fileName) && !Commit.different(splitPoint, currentCommit, fileName)
+            if (currentCommit.contains(fileName)
+                    && !Commit.different(splitPoint, currentCommit, fileName)
                     && !mergedCommit.contains(fileName)) {
                 rm(fileName);
             }
@@ -505,12 +507,13 @@ public class Command {
                 if (!(currentExists && mergedExists)
                         && (
                         (currentExists && Commit.different(splitPoint, currentCommit, fileName))
-                                || (mergedExists && Commit.different(splitPoint, mergedCommit, fileName)))
+                        || (mergedExists && Commit.different(splitPoint, mergedCommit, fileName)))
                 ) {
                     conflict = true;
                 }
             } else {
-                if (currentExists && mergedExists && Commit.different(currentCommit, mergedCommit, fileName)) {
+                if (currentExists && mergedExists
+                        && Commit.different(currentCommit, mergedCommit, fileName)) {
                     conflict = true;
                 }
             }
@@ -535,7 +538,8 @@ public class Command {
                 ? readContentsAsString(currentCommit.getFile(fileName)) : "";
         String mergedContent = mergedCommit.contains(fileName)
                 ? readContentsAsString(mergedCommit.getFile(fileName)) : "";
-        writeContents(fileOf(fileName), "<<<<<<< HEAD\n", currentContent, "=======\n", mergedContent, ">>>>>>>\n");
+        writeContents(fileOf(fileName), "<<<<<<< HEAD\n",
+                currentContent, "=======\n", mergedContent, ">>>>>>>\n");
     }
 
     private static String mergeMessage(String currentBranch, String givenBranch) {

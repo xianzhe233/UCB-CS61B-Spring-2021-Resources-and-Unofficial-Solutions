@@ -239,8 +239,10 @@ public class Repository {
             if ((currentCommit.contains(fileName) && file.exists()
                     && currentCommit.isChanged(file) && !addition.containsKey(fileName))
                     || (addition.containsKey(fileName) && !file.exists())
-                    || (currentCommit.contains(fileName) && !removal.contains(fileName) && !file.exists())
-                    || (addition.containsKey(fileName) && file.exists() && differentFromAddition(fileName))
+                    || (currentCommit.contains(fileName)
+                    && !removal.contains(fileName) && !file.exists())
+                    || (addition.containsKey(fileName) && file.exists()
+                    && differentFromAddition(fileName))
             ) {
                 modifiedFiles.add(fileName);
             }

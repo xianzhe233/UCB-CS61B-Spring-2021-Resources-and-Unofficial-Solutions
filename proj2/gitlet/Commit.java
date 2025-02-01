@@ -63,7 +63,8 @@ public class Commit implements Serializable {
         // Finally uses hash.
         String parentStr = parent == null ? "" : parent.id;
         String mergedStr = merged == null ? "" : merged.id;
-        this.id = sha1(this.message, String.valueOf(this.timestamp), this.fileMap.toString(), parentStr, mergedStr);
+        this.id = sha1(this.message, String.valueOf(this.timestamp),
+                this.fileMap.toString(), parentStr, mergedStr);
 
         // Saves the commit as file.
         saveCommit(this);
@@ -274,7 +275,8 @@ public class Commit implements Serializable {
         System.out.println("===");
         System.out.println("commit " + this.id);
         if (mergedParent != null) {
-            System.out.println("Merge: " + parent.substring(0, 7) + ' ' + mergedParent.substring(0, 7));
+            System.out.println("Merge: " + parent.substring(0, 7)
+                    + ' ' + mergedParent.substring(0, 7));
         }
         System.out.println("Date: " + dateOf(this.timestamp));
         System.out.println(this.message);
