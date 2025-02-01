@@ -536,7 +536,7 @@ public class Command {
         }
         String currentContent = currentCommit.contains(fileName) ? readContentsAsString(currentCommit.getFile(fileName)) : "";
         String mergedContent = mergedCommit.contains(fileName) ? readContentsAsString(mergedCommit.getFile(fileName)) : "";
-        writeContents(fileOf(fileName), "<<<<<<< HEAD\n", currentContent, "\n=======\n", mergedContent, ">>>>>>>");
+        writeContents(fileOf(fileName), "<<<<<<< HEAD\n", currentContent, "=======\n", mergedContent, ">>>>>>>\n");
     }
 
     private static String mergeMessage(String currentBranch, String givenBranch) {
