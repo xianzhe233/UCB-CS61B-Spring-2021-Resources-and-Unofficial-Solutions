@@ -87,6 +87,9 @@ public class Command {
                     break;
                 case "merge":
                     merge(commandArgs);
+                    break;
+                default:
+                    throw CommandNotExistException();
             }
         }
     }
@@ -191,9 +194,9 @@ public class Command {
     }
 
     private static void status() throws GitletException {
-        List<String> WDF = workingDirectoryFiles();
-        List<String> modifiedFiles = modifiedFiles(WDF);
-        List<String> untrackedFiles = untrackedFiles(WDF);
+        List<String> workingDirectoryFiles = workingDirectoryFiles();
+        List<String> modifiedFiles = modifiedFiles(workingDirectoryFiles);
+        List<String> untrackedFiles = untrackedFiles(workingDirectoryFiles);
         // branches
         System.out.println("=== Branches ===");
         List<String> branches = Branch.allBranches();
@@ -264,6 +267,8 @@ public class Command {
             case 3:
                 checkout(args[0], args[1], args[2]);
                 break;
+            default:
+                throw OperandsIncorrectException();
         }
     }
 
@@ -408,6 +413,42 @@ public class Command {
         merge(args[0]);
     }
 
+    /**
+     * Any files that have been modified in the given branch since the split point,
+     * but not modified in the current branch since the split point should be changed
+     * to their versions in the given branch and automatically staged.
+     */
+
+    /**
+     * Any files that have been modified in the current branch but not in the given
+     * branch since the split point should stay as they are. (do nothing)
+     */
+
+    /**
+     * Any files that have been modified in both the current and given branch in the
+     * same way (i.e., both files now have the same content or were both removed) are
+     * left unchanged by the merge. (do nothing)
+     */
+
+    /**
+     * Files that didn't present at split point, but only presents at the given branch
+     * should be checked out and staged.
+     */
+
+    /** Files that presented at split point, unmodified at current branch, doesn't
+     *  exist at the given branch should be removed.
+     */
+
+    /** Files that presented at split point, unmodified at given branch, doesn't
+     *  exist at the current branch should remain absent. (do nothing)
+     */
+
+    /**
+     * In conflict:
+     * 1. both changed since split point, but contents are different;
+     * 2. one is changed since split point, another is absent;
+     * 3. absent at split point, different at current and given branch.
+     */
     private static void merge(String branchName) throws GitletException {
         if (!Branch.exists(branchName)) {
             throw mergeBranchNotExistException();
@@ -415,28 +456,18 @@ public class Command {
         if (branchName.equals(getBranch())) {
             throw mergeCanNotMergeItselfException();
         }
-
         String currentBranch = getBranch();
         Commit currentCommit = getHead();
         Commit mergedCommit = Branch.get(branchName);
         Commit splitPoint = Commit.splitPoint(currentCommit, mergedCommit);
-
         untrackedCheck(mergedCommit, mergeDangerousException());
-
         if (splitPoint.equals(mergedCommit)) {
             throw mergeGivenBranchIsAncestorMessage();
         }
-
         if (splitPoint.equals(currentCommit)) {
             checkout(branchName);
             throw mergeCurrentBranchIsAncestorMessage();
         }
-
-        /**
-         * Any files that have been modified in the given branch since the split point,
-         * but not modified in the current branch since the split point should be changed
-         * to their versions in the given branch and automatically staged.
-         */
         for (String fileName : splitPoint.files()) {
             if (currentCommit.contains(fileName) && mergedCommit.contains(fileName)
                     && Commit.different(splitPoint, mergedCommit, fileName)
@@ -445,49 +476,18 @@ public class Command {
                 stagingAdd(fileName);
             }
         }
-
-        /**
-         * Any files that have been modified in the current branch but not in the given
-         * branch since the split point should stay as they are. (do nothing)
-         */
-
-        /**
-         * Any files that have been modified in both the current and given branch in the
-         * same way (i.e., both files now have the same content or were both removed) are
-         * left unchanged by the merge. (do nothing)
-         */
-
-        /**
-         * Files that didn't present at split point, but only presents at the given branch
-         * should be checked out and staged.
-         */
         for (String fileName : mergedCommit.files()) {
             if (!splitPoint.contains(fileName) && !currentCommit.contains(fileName)) {
                 Repository.checkout(mergedCommit, fileName);
                 stagingAdd(fileName);
             }
         }
-
-        /** Files that presented at split point, unmodified at current branch, doesn't
-         *  exist at the given branch should be removed.
-         */
         for (String fileName : splitPoint.files()) {
             if (currentCommit.contains(fileName) && !Commit.different(splitPoint, currentCommit, fileName)
                     && !mergedCommit.contains(fileName)) {
                 rm(fileName);
             }
         }
-
-        /** Files that presented at split point, unmodified at given branch, doesn't
-         *  exist at the current branch should remain absent. (do nothing)
-         */
-
-        /**
-         *  In conflict:
-         *  1. both changed since split point, but contents are different;
-         *  2. one is changed since split point, another is absent;
-         *  3. absent at split point, different at current and given branch.
-         */
         Set<String> potentialConflictFiles = new HashSet<>(mergedCommit.files());
         potentialConflictFiles.addAll(currentCommit.files());
         boolean conflictExists = false;
@@ -505,8 +505,8 @@ public class Command {
                 if (!(currentExists && mergedExists)
                         && (
                         (currentExists && Commit.different(splitPoint, currentCommit, fileName))
-                                || (mergedExists && Commit.different(splitPoint, mergedCommit, fileName))
-                )) {
+                                || (mergedExists && Commit.different(splitPoint, mergedCommit, fileName)))
+                ) {
                     conflict = true;
                 }
             } else {
@@ -514,17 +514,14 @@ public class Command {
                     conflict = true;
                 }
             }
-
             if (conflict) {
                 conflictExists = true;
                 mergeFile(currentCommit, mergedCommit, fileName);
                 stagingAdd(fileName);
             }
         }
-
         String commitMessage = mergeMessage(currentBranch, branchName);
         mergedCommit(branchName, commitMessage);
-
         if (conflictExists) {
             throw mergeHasConflictMessage();
         }
@@ -534,8 +531,10 @@ public class Command {
         if (!fileOf(fileName).exists()) {
             createFile(fileOf(fileName));
         }
-        String currentContent = currentCommit.contains(fileName) ? readContentsAsString(currentCommit.getFile(fileName)) : "";
-        String mergedContent = mergedCommit.contains(fileName) ? readContentsAsString(mergedCommit.getFile(fileName)) : "";
+        String currentContent = currentCommit.contains(fileName)
+                ? readContentsAsString(currentCommit.getFile(fileName)) : "";
+        String mergedContent = mergedCommit.contains(fileName)
+                ? readContentsAsString(mergedCommit.getFile(fileName)) : "";
         writeContents(fileOf(fileName), "<<<<<<< HEAD\n", currentContent, "=======\n", mergedContent, ">>>>>>>\n");
     }
 
