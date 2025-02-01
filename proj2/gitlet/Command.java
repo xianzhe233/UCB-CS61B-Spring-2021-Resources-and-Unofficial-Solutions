@@ -539,7 +539,7 @@ public class Command {
         String mergedContent = mergedCommit.contains(fileName) ? readContentsAsString(mergedCommit.getFile(fileName)) : "";
         return "<<<<<<< HEAD\n"
                 + currentContent
-                + "=======\n"
+                + "\n=======\n"
                 + mergedContent
                 + ">>>>>>>";
     }
