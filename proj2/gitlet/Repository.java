@@ -17,13 +17,10 @@ import static gitlet.Utils.*;
  * @author xianzhe233
  */
 public class Repository {
-
     /**
-     * The current working directory.
+     * The working directory.
      */
     public static final File CWD = new File(System.getProperty("user.dir"));
-// TODO: Change CWD back finally.
-//    public static final File CWD = new File("playground");
     /**
      * The .gitlet directory.
      */
@@ -206,9 +203,9 @@ public class Repository {
      */
     static boolean different(Commit commit, String fileName) {
         File commitFile = commit.getFile(fileName);
-        String CFContent = readContentsAsString(commitFile);
-        String WFContent = readContentsAsString(fileOf(fileName));
-        return !CFContent.equals(WFContent);
+        String commitFileContent = readContentsAsString(commitFile);
+        String workingFileContent = readContentsAsString(fileOf(fileName));
+        return !commitFileContent.equals(workingFileContent);
     }
 
     /**
@@ -239,7 +236,8 @@ public class Repository {
              *  4. Tracked in current commit, not staged for removal, but deleted.
              */
             File file = fileOf(fileName);
-            if ((currentCommit.contains(fileName) && file.exists() && currentCommit.isChanged(file) && !addition.containsKey(fileName))
+            if ((currentCommit.contains(fileName) && file.exists()
+                    && currentCommit.isChanged(file) && !addition.containsKey(fileName))
                     || (addition.containsKey(fileName) && !file.exists())
                     || (currentCommit.contains(fileName) && !removal.contains(fileName) && !file.exists())
                     || (addition.containsKey(fileName) && file.exists() && differentFromAddition(fileName))

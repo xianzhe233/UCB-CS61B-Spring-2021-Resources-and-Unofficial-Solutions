@@ -39,7 +39,8 @@ public class Commit implements Serializable {
     /**
      * Creates a commit object and save it.
      */
-    public Commit(Commit parent, Commit merged, String message, HashMap<String, String> addition, HashSet<String> removal) {
+    public Commit(Commit parent, Commit merged, String message,
+                  HashMap<String, String> addition, HashSet<String> removal) {
         // Assigns message and timestamp.
         this.message = message;
         this.timestamp = (parent != null) ? getTimeStamp() : INITIAL_TIMESTAMP;
@@ -89,14 +90,14 @@ public class Commit implements Serializable {
     /**
      * Returns the first 2 chars of id.
      */
-    static private String idHead(String id) {
+    private static String idHead(String id) {
         return id.substring(0, 2);
     }
 
     /**
      * Returns chars except the first 2 chars of id.
      */
-    static private String idTail(String id) {
+    private static String idTail(String id) {
         return id.substring(2);
     }
 

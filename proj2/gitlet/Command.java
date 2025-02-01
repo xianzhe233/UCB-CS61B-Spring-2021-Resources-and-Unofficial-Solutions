@@ -32,24 +32,24 @@ public class Command {
 
     static void process(String[] args) throws GitletException {
         if (args.length == 0) {
-            throw NoArgsException();
+            throw noArgsException();
         }
 
         String command = args[0];
         String[] commandArgs = Arrays.copyOfRange(args, 1, args.length);
 
         if (!ARGS_MAP.containsKey(command)) {
-            throw CommandNotExistException();
+            throw commandNotExistException();
         }
         if (!ARGS_MAP.get(command).contains(commandArgs.length)) {
-            throw OperandsIncorrectException();
+            throw operandsIncorrectException();
         }
 
         if (command.equals("init")) {
             init();
         } else {
             if (!exists()) {
-                throw UninitializedException();
+                throw uninitializedException();
             }
             switch (command) {
                 case "add":
@@ -89,7 +89,7 @@ public class Command {
                     merge(commandArgs);
                     break;
                 default:
-                    throw CommandNotExistException();
+                    throw commandNotExistException();
             }
         }
     }
@@ -268,7 +268,7 @@ public class Command {
                 checkout(args[0], args[1], args[2]);
                 break;
             default:
-                throw OperandsIncorrectException();
+                throw operandsIncorrectException();
         }
     }
 
@@ -282,7 +282,7 @@ public class Command {
 
     private static void checkout(String dash, String fileName) throws GitletException {
         if (!dash.equals("--")) {
-            throw OperandsIncorrectException();
+            throw operandsIncorrectException();
         }
         if (!getHead().contains(fileName)) {
             throw checkoutFileNotExistException();
@@ -293,7 +293,7 @@ public class Command {
 
     private static void checkout(String commitId, String dash, String fileName) throws GitletException {
         if (!dash.equals("--")) {
-            throw OperandsIncorrectException();
+            throw operandsIncorrectException();
         }
         if (!Commit.exists(commitId)) {
             throw checkoutCommitNotExistException();

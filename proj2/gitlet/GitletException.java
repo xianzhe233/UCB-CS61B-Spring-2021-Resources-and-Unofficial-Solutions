@@ -22,19 +22,19 @@ class GitletException extends RuntimeException {
         super(msg);
     }
 
-    static GitletException NoArgsException() {
+    static GitletException noArgsException() {
         return new GitletException("Please enter a command.");
     }
 
-    static GitletException CommandNotExistException() {
+    static GitletException commandNotExistException() {
         return new GitletException("No command with that name exists.");
     }
 
-    static GitletException OperandsIncorrectException() {
+    static GitletException operandsIncorrectException() {
         return new GitletException("Incorrect operands.");
     }
 
-    static GitletException UninitializedException() {
+    static GitletException uninitializedException() {
         return new GitletException("Not in an initialized Gitlet directory.");
     }
 
