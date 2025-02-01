@@ -517,11 +517,7 @@ public class Command {
 
             if (conflict) {
                 conflictExists = true;
-                String mergedContent = mergeFileContent(currentCommit, mergedCommit, fileName);
-                if (!fileOf(fileName).exists()) {
-                    createFile(fileOf(fileName));
-                }
-                writeContents(fileOf(fileName), mergedContent);
+                mergeFile(currentCommit, mergedCommit, fileName);
                 stagingAdd(fileName);
             }
         }
@@ -534,14 +530,13 @@ public class Command {
         }
     }
 
-    private static String mergeFileContent(Commit currentCommit, Commit mergedCommit, String fileName) {
+    private static void mergeFile(Commit currentCommit, Commit mergedCommit, String fileName) {
+        if (!fileOf(fileName).exists()) {
+            createFile(fileOf(fileName));
+        }
         String currentContent = currentCommit.contains(fileName) ? readContentsAsString(currentCommit.getFile(fileName)) : "";
         String mergedContent = mergedCommit.contains(fileName) ? readContentsAsString(mergedCommit.getFile(fileName)) : "";
-        return "<<<<<<< HEAD\n"
-                + currentContent
-                + "\n=======\n"
-                + mergedContent
-                + ">>>>>>>";
+        writeContents(fileOf(fileName), "<<<<<<< HEAD\n", currentContent, "\n=======\n", mergedContent, ">>>>>>>");
     }
 
     private static String mergeMessage(String currentBranch, String givenBranch) {
