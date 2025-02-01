@@ -205,12 +205,20 @@ public class Commit implements Serializable {
             return c1;
         }
         HashSet<String> ancestors = new HashSet<>();
-        while (c1 != null) {
-            ancestors.add(c1.id);
-            if (isInitial(c1)) {
-                break;
+        Queue<Commit> commitQueue = new LinkedList<>();
+        commitQueue.offer(c1);
+        while (!commitQueue.isEmpty()) {
+            Commit commit = commitQueue.poll();
+            ancestors.add(commit.id);
+            if (isInitial(commit)) {
+                continue;
             }
-            c1 = get(c1.parent);
+            if (!ancestors.contains(commit.parent)) {
+                commitQueue.offer(get(commit.parent));
+            }
+            if (commit.mergedParent != null && !ancestors.contains(commit.mergedParent)) {
+                commitQueue.offer(get(commit.mergedParent));
+            }
         }
         while (c2 != null) {
             if (ancestors.contains(c2.id)) {
