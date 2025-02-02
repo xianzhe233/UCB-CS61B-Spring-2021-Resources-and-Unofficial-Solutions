@@ -44,6 +44,8 @@ public class Repository {
         Blob.BLOBS_DIR.mkdirs();
         Branch.BRANCHES_DIR.mkdirs();
         createFile(HEAD_FILE);
+        createFile(Remote.REMOTE_FILE);
+        Remote.initRemote(); //EC
         STAGING_DIR.mkdirs();
         createFile(ADDITION_FILE);
         createFile(REMOVAL_FILE);
