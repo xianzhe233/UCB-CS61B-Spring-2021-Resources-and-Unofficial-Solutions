@@ -1,6 +1,5 @@
 package gitlet;
 
-import java.io.File;
 import java.util.*;
 
 import static gitlet.GitletException.*;
@@ -27,7 +26,13 @@ public class Command {
             Map.entry("branch", Set.of(1)),
             Map.entry("rm-branch", Set.of(1)),
             Map.entry("reset", Set.of(1)),
-            Map.entry("merge", Set.of(1))
+            Map.entry("merge", Set.of(1)),
+            // Extra Credit
+            Map.entry("add-remote", Set.of(2)),
+            Map.entry("rm-remote", Set.of(1)),
+            Map.entry("push", Set.of(2)),
+            Map.entry("fetch", Set.of(2)),
+            Map.entry("pull", Set.of(2))
     );
 
     static void process(String[] args) throws GitletException {
@@ -88,6 +93,22 @@ public class Command {
                 case "merge":
                     merge(commandArgs);
                     break;
+                case "add-remote":
+                    addRemote(commandArgs);
+                    break;
+                case "rm-remote":
+                    rmRemote(commandArgs);
+                    break;
+                case "push":
+                    push(commandArgs);
+                    break;
+                case "fetch":
+                    fetch(commandArgs);
+                    break;
+                case "pull":
+                    pull(commandArgs);
+                    break;
+
                 default:
                     throw commandNotExistException();
             }
@@ -271,7 +292,6 @@ public class Command {
                 throw operandsIncorrectException();
         }
     }
-
 
 
     private static void checkout(String dash, String fileName) throws GitletException {
@@ -501,7 +521,7 @@ public class Command {
                 if (!(currentExists && mergedExists)
                         && (
                         (currentExists && Commit.different(splitPoint, currentCommit, fileName))
-                        || (mergedExists && Commit.different(splitPoint, mergedCommit, fileName)))
+                                || (mergedExists && Commit.different(splitPoint, mergedCommit, fileName)))
                 ) {
                     conflict = true;
                 }
@@ -538,5 +558,66 @@ public class Command {
 
     private static String mergeMessage(String currentBranch, String givenBranch) {
         return "Merged " + givenBranch + " into " + currentBranch + ".";
+    }
+
+    private static void addRemote(String[] args) throws GitletException {
+        addRemote(args[0], args[1]);
+    }
+
+    private static void addRemote(String remoteName, String path) throws GitletException {
+        if (Remote.exists(remoteName)) {
+            throw remoteAlreadyExistsException();
+        }
+        Remote.remoteAdd(remoteName, path);
+    }
+
+    private static void rmRemote(String[] args) throws GitletException {
+        rmRemote(args[0]);
+    }
+
+    private static void rmRemote(String remoteName) throws GitletException {
+        if (!Remote.exists(remoteName)) {
+            throw remoteNameNotExistException();
+        }
+        Remote.remoteRemove(remoteName);
+    }
+
+    private static void push(String[] args) throws GitletException {
+        push(args[0], args[1]);
+    }
+
+    private static void push(String remoteName, String remoteBranchName) throws GitletException {
+        if (!Remote.exists(remoteName)) {
+            throw remoteNameNotExistException();
+        }
+        if (!Remote.remoteRepo(remoteName).exists()) {
+            throw remoteNotFoundException();
+        }
+
+        Commit remoteBranchHead;
+        if (!Remote.hasBranch(remoteName, remoteBranchName)) {
+            remoteBranchHead = Commit.getInitialCommit();
+        } else {
+            remoteBranchHead = Remote.getBranch(remoteName, remoteBranchName);
+        }
+
+        HashSet<String> ancestors = Commit.ancestorsOf(getHead());
+        if (!ancestors.contains(remoteBranchHead.id)) {
+            throw remoteNeedPullDownFirstException();
+        }
+
+
+    }
+
+    private static void fetch(String[] args) throws GitletException {
+    }
+
+    private static void fetch(String remoteName, String remoteBranchName) throws GitletException {
+    }
+
+    private static void pull(String[] args) throws GitletException {
+    }
+
+    private static void pull(String remoteName, String remoteBranchName) throws GitletException {
     }
 }

@@ -137,4 +137,24 @@ class GitletException extends RuntimeException {
         return new GitletException("Encountered a merge conflict.");
     }
 
+    static GitletException remoteAlreadyExistsException() {
+        return new GitletException("A remote with that name already exists.");
+    }
+
+    static GitletException remoteNameNotExistException() {
+        return new GitletException("A remote with that name does not exist.");
+    }
+
+    static GitletException remoteNotFoundException() {
+        return new GitletException("Remote directory not found.");
+    }
+
+    static GitletException remoteNeedPullDownFirstException() {
+        return new GitletException("Please pull down remote changes before pushing.");
+    }
+
+    static GitletException remoteBranchNotExistException() {
+        return new GitletException("That remote does not have that branch.");
+    }
+
 }

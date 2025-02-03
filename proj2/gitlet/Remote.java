@@ -3,8 +3,8 @@ package gitlet;
 import java.io.File;
 import java.util.HashMap;
 
+import static gitlet.Repository.GITLET_DIR;
 import static gitlet.Utils.*;
-import static gitlet.Repository.*;
 
 public class Remote {
     /**
@@ -91,8 +91,8 @@ public class Remote {
     /**
      * Gets a blob's file from a remote repo with blobId.
      */
-    private static File getBlobFile(String remotename, String blobId) {
-        return Blob.get(remoteBlobDir(remotename), blobId);
+    private static File getBlobFile(String remoteName, String blobId) {
+        return Blob.get(remoteBlobDir(remoteName), blobId);
     }
 
     /**

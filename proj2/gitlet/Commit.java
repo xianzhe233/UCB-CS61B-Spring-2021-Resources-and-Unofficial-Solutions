@@ -155,6 +155,10 @@ public class Commit implements Serializable {
         return toCommit(getCommitFile(COMMITS_DIR, id));
     }
 
+    static Commit get(File commitDir, String id) {
+        return toCommit(getCommitFile(commitDir, id));
+    }
+
     static File getCommitFile(File commitDir, String id) {
         File secondaryDir = join(commitDir, idHead(id));
         String idTail = idTail(id);
@@ -213,26 +217,15 @@ public class Commit implements Serializable {
         return commits;
     }
 
+    /**
+     * Gets c1 and c2's splitPoint.
+     */
     static Commit splitPoint(Commit c1, Commit c2) {
         if (c1.equals(c2)) {
             return c1;
         }
-        HashSet<String> ancestors = new HashSet<>();
-        Queue<Commit> commitQueue = new LinkedList<>();
-        commitQueue.offer(c1);
-        while (!commitQueue.isEmpty()) {
-            Commit commit = commitQueue.poll();
-            ancestors.add(commit.id);
-            if (isInitial(commit)) {
-                continue;
-            }
-            if (!ancestors.contains(commit.parent)) {
-                commitQueue.offer(get(commit.parent));
-            }
-            if (commit.mergedParent != null && !ancestors.contains(commit.mergedParent)) {
-                commitQueue.offer(get(commit.mergedParent));
-            }
-        }
+
+        HashSet<String> ancestors = ancestorsOf(c1);
         while (c2 != null) {
             if (ancestors.contains(c2.id)) {
                 return c2;
@@ -241,6 +234,33 @@ public class Commit implements Serializable {
         }
 
         return null; // This should never happen.
+    }
+
+    /**
+     * Returns all ancestors of source commit.(including srcCommit itself)
+     */
+    static HashSet<String> ancestorsOf(Commit srcCommit) {
+        return ancestorsOf(COMMITS_DIR, srcCommit);
+    }
+
+    static HashSet<String> ancestorsOf(File commitDir, Commit srcCommit) {
+        HashSet<String> ancestors = new HashSet<>();
+        Queue<Commit> commitQueue = new LinkedList<>();
+        commitQueue.offer(srcCommit);
+        while (!commitQueue.isEmpty()) {
+            Commit commit = commitQueue.poll();
+            ancestors.add(commit.id);
+            if (isInitial(commit)) {
+                continue;
+            }
+            if (!ancestors.contains(commit.parent)) {
+                commitQueue.offer(get(commitDir, commit.parent));
+            }
+            if (commit.mergedParent != null && !ancestors.contains(commit.mergedParent)) {
+                commitQueue.offer(get(commitDir, commit.mergedParent));
+            }
+        }
+        return ancestors;
     }
 
     /**
