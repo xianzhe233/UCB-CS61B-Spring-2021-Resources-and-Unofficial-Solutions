@@ -1,6 +1,10 @@
 package gitlet;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 
 import static gitlet.Repository.GITLET_DIR;
@@ -27,7 +31,13 @@ public class Remote {
         if (!f2.exists()) {
             createFile(f2);
         }
-        writeContents(f2, readContentsAsString(f1));
+        Path srcPath = f1.toPath();
+        Path destPath = f2.toPath();
+        try {
+            Files.copy(srcPath, destPath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
