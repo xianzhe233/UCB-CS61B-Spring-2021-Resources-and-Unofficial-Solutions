@@ -1,6 +1,5 @@
 package gitlet;
 
-import java.io.File;
 import java.util.*;
 
 import static gitlet.GitletException.*;
@@ -522,7 +521,7 @@ public class Command {
                 if (!(currentExists && mergedExists)
                         && (
                         (currentExists && Commit.different(splitPoint, currentCommit, fileName))
-                                || (mergedExists && Commit.different(splitPoint, mergedCommit, fileName)))
+                        || (mergedExists && Commit.different(splitPoint, mergedCommit, fileName)))
                 ) {
                     conflict = true;
                 }
@@ -630,7 +629,8 @@ public class Command {
         }
 
         Commit remoteBranchHead = Remote.getBranch(remoteName, remoteBranchName);
-        HashSet<String> ancestors = Commit.ancestorsOf(Remote.remoteCommitDir(remoteName), remoteBranchHead);
+        HashSet<String> ancestors = Commit.ancestorsOf(
+                Remote.remoteCommitDir(remoteName), remoteBranchHead);
         for (String commitId : ancestors) {
             Remote.copyCommit(Remote.remoteRepo(remoteName), GITLET_DIR, commitId);
         }
