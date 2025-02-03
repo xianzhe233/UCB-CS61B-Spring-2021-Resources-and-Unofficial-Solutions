@@ -1,5 +1,6 @@
 package gitlet;
 
+import java.io.File;
 import java.util.*;
 
 import static gitlet.GitletException.*;
@@ -605,19 +606,49 @@ public class Command {
         if (!ancestors.contains(remoteBranchHead.id)) {
             throw remoteNeedPullDownFirstException();
         }
+        ancestors.removeAll(Commit.ancestorsOf(remoteBranchHead));
+        for (String commitId : ancestors) {
+            Remote.copyCommit(GITLET_DIR, Remote.remoteRepo(remoteName), commitId);
+        }
 
-
+        Remote.setBranch(remoteName, remoteBranchName, getHead().id);
     }
 
     private static void fetch(String[] args) throws GitletException {
+        fetch(args[0], args[1]);
     }
 
     private static void fetch(String remoteName, String remoteBranchName) throws GitletException {
+        if (!Remote.exists(remoteName)) {
+            throw remoteNameNotExistException();
+        }
+        if (!Remote.remoteRepo(remoteName).exists()) {
+            throw remoteNotFoundException();
+        }
+        if (!Remote.hasBranch(remoteName, remoteBranchName)) {
+            throw remoteBranchNotExistException();
+        }
+
+        Commit remoteBranchHead = Remote.getBranch(remoteName, remoteBranchName);
+        HashSet<String> ancestors = Commit.ancestorsOf(Remote.remoteCommitDir(remoteName), remoteBranchHead);
+        for (String commitId : ancestors) {
+            Remote.copyCommit(Remote.remoteRepo(remoteName), GITLET_DIR, commitId);
+        }
+
+        Branch.set(fetchBranchName(remoteName, remoteBranchName), remoteBranchHead.id);
+    }
+
+    private static String fetchBranchName(String remoteName, String remoteBranchName) {
+        return remoteName + "/" + remoteBranchName;
     }
 
     private static void pull(String[] args) throws GitletException {
+        pull(args[0], args[1]);
     }
 
     private static void pull(String remoteName, String remoteBranchName) throws GitletException {
+        fetch(remoteName, remoteBranchName);
+        String branchName = fetchBranchName(remoteName, remoteBranchName);
+        merge(branchName);
     }
 }
