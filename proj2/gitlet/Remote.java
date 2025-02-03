@@ -10,6 +10,11 @@ import java.util.HashMap;
 import static gitlet.Repository.GITLET_DIR;
 import static gitlet.Utils.*;
 
+/**
+ * Remote keeps track of a set of remote repositories of current repository.
+ * It manipulates remote repositories, and provide methods that interact
+ * between current repository and remote repositories.
+ */
 public class Remote {
     /**
      * The file of remote repositories map.
