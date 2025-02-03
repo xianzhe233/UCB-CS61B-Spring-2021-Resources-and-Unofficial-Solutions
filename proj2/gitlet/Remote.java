@@ -130,7 +130,8 @@ public class Remote {
      * A getBranch method for remote repository.
      */
     static Commit getBranch(String remoteName, String branchName) {
-        return Commit.toCommit(getBranchFile(remoteName, branchName));
+        String commitId = readContentsAsString(getBranchFile(remoteName, branchName));
+        return getCommit(remoteName, commitId);
     }
 
     /**

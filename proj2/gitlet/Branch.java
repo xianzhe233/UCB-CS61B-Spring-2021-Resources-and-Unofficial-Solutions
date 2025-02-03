@@ -66,6 +66,9 @@ public class Branch {
 
     static void set(File branchDir, String branchName, String commitId) {
         File branchFile = getBranchFile(branchDir, branchName);
+        if (!branchFile.getParentFile().exists()) {
+            branchFile.getParentFile().mkdirs();
+        }
         if (!branchFile.exists()) {
             createFile(branchFile);
         }
