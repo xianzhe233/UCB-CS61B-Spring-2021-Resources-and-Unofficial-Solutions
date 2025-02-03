@@ -94,7 +94,11 @@ public class Repository {
      * Gets branch name that head is on.
      */
     static String getBranch() {
-        return readContentsAsString(HEAD_FILE);
+        return getBranch(HEAD_FILE);
+    }
+
+    static String getBranch(File headFile) {
+        return readContentsAsString(headFile);
     }
 
     /**

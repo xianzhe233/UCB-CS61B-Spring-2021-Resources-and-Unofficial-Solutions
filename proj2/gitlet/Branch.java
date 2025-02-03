@@ -18,14 +18,22 @@ public class Branch {
      * Returns branch file of branchName. Branch file don't always exist.
      */
     private static File getBranchFile(String branchName) {
-        return join(BRANCHES_DIR, branchName);
+        return getBranchFile(BRANCHES_DIR, branchName);
+    }
+
+    static File getBranchFile(File branchDir, String branchName) {
+        return join(branchDir, branchName);
     }
 
     /**
      * Returns if a branch with name branchName exists.
      */
     static boolean exists(String branchName) {
-        return getBranchFile(branchName).exists();
+        return exists(BRANCHES_DIR, branchName);
+    }
+
+    static boolean exists(File branchDir, String branchName) {
+        return getBranchFile(branchDir, branchName).exists();
     }
 
     /**
@@ -33,19 +41,31 @@ public class Branch {
      * Always use exists() before this.
      */
     static Commit get(String branchName) {
-        String commitId = readContentsAsString(getBranchFile(branchName));
-        return Commit.get(commitId);
+        return get(BRANCHES_DIR, Commit.COMMITS_DIR, branchName);
+    }
+
+    static Commit get(File branchDir, File commitDir, String branchName) {
+        String commitId = readContentsAsString(getBranchFile(branchDir, branchName));
+        return Commit.toCommit(Commit.getCommitFile(commitDir, commitId));
     }
 
     /**
      * Set branch with name branchName to point at commit.
      */
     static void set(String branchName, Commit commit) {
-        set(branchName, commit.id);
+        set(BRANCHES_DIR, branchName, commit);
     }
 
     static void set(String branchName, String commitId) {
-        File branchFile = getBranchFile(branchName);
+        set(BRANCHES_DIR, branchName, commitId);
+    }
+
+    static void set(File branchDir, String branchName, Commit commit) {
+        set(branchDir, branchName, commit.id);
+    }
+
+    static void set(File branchDir, String branchName, String commitId) {
+        File branchFile = getBranchFile(branchDir, branchName);
         if (!branchFile.exists()) {
             createFile(branchFile);
         }

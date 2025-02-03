@@ -272,13 +272,7 @@ public class Command {
         }
     }
 
-    /**
-     * Copies f1's content to f2.
-     * former -> latter
-     */
-    private static void copy(File f1, File f2) {
-        writeContents(f2, readContentsAsString(f1));
-    }
+
 
     private static void checkout(String dash, String fileName) throws GitletException {
         if (!dash.equals("--")) {

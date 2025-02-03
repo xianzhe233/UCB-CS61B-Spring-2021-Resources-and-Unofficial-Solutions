@@ -91,14 +91,14 @@ public class Commit implements Serializable {
     /**
      * Returns the first 2 chars of id.
      */
-    private static String idHead(String id) {
+    static String idHead(String id) {
         return id.substring(0, 2);
     }
 
     /**
      * Returns chars except the first 2 chars of id.
      */
-    private static String idTail(String id) {
+    static String idTail(String id) {
         return id.substring(2);
     }
 
@@ -142,16 +142,27 @@ public class Commit implements Serializable {
     }
 
     /**
+     * Reads a commit object from commitFile.
+     */
+    static Commit toCommit(File commitFile) {
+        return readObject(commitFile, Commit.class);
+    }
+
+    /**
      * Gets Commit object by commit id. Abbreviation supported.
      */
     static Commit get(String id) {
-        File secondaryDir = join(COMMITS_DIR, idHead(id));
+        return toCommit(getCommitFile(COMMITS_DIR, id));
+    }
+
+    static File getCommitFile(File commitDir, String id) {
+        File secondaryDir = join(commitDir, idHead(id));
         String idTail = idTail(id);
         List<String> commitNames = plainFilenamesIn(secondaryDir);
         for (String commitName : commitNames) {
             if (commitName.startsWith(idTail)) {
                 File commitFile = join(secondaryDir, commitName);
-                return readObject(commitFile, Commit.class);
+                return commitFile;
             }
         }
         return null; // Because Command always check existence before get, this will never happen.
@@ -295,6 +306,11 @@ public class Commit implements Serializable {
     HashSet<String> files() {
         HashSet<String> files = new HashSet<>(fileMap.keySet());
         return files;
+    }
+
+    HashSet<String> blobs() {
+        HashSet<String> blobs = new HashSet<>(fileMap.values());
+        return blobs;
     }
 
     /**

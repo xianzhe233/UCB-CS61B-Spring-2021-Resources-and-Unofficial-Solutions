@@ -52,7 +52,11 @@ public class Blob {
      * Gets the blob file by id.
      */
     static File get(String id) {
-        File blobFile = join(BLOBS_DIR, id);
+        return get(BLOBS_DIR, id);
+    }
+
+    static File get(File blobDir, String id) {
+        File blobFile = join(blobDir, id);
         if (blobFile.exists()) {
             return blobFile;
         } else {
