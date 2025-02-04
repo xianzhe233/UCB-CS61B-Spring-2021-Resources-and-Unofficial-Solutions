@@ -1,0 +1,735 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>命令</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="1831e77d-f823-8077-a338-c885f494b0bf" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">⌨️</span></div><h1 class="page-title">命令</h1><p class="page-description"></p></header><div class="page-body"><h2 id="1811e77d-f823-8017-84e8-dbcb770e3484" class=""> <mark class="highlight-blue"><code>init</code></mark><mark class="highlight-blue"> </mark></h2><ul id="1811e77d-f823-80ee-b721-c7fb01671d13" class="bulleted-list"><li style="list-style-type:disc">描述：创建一个 <mark class="highlight-pink">commit</mark> ，<mark class="highlight-pink">commit message</mark> 默认为 <mark class="highlight-blue"><code>initial commit</code></mark><mark class="highlight-blue"> </mark><mark class="highlight-default">，</mark><mark class="highlight-pink">branch</mark><mark class="highlight-default"> 默认为</mark><mark class="highlight-blue"> </mark><mark class="highlight-blue"><code>master</code></mark><mark class="highlight-blue"> </mark><mark class="highlight-default">，时间戳默认为 </mark><mark class="highlight-blue"><code>00:00:00 UTC, Thursday, 1 January 1970</code></mark><mark class="highlight-default"> 。</mark></li></ul><ul id="1811e77d-f823-80d1-aa01-df730b8f1167" class="bulleted-list"><li style="list-style-type:disc">运行时间：O(1)</li></ul><ul id="1811e77d-f823-80ef-800e-eda284f2d4ea" class="bulleted-list"><li style="list-style-type:disc">错误<ul id="1811e77d-f823-8063-bf26-f9e06db670b8" class="bulleted-list"><li style="list-style-type:circle">如果当前文件夹已存在 Gitlet 控制，输出错误信息 <mark class="highlight-yellow"><code>A Gitlet version-control system already exists in the current directory.</code></mark><mark class="highlight-yellow"> </mark></li></ul></li></ul><ul id="1811e77d-f823-80b9-85aa-da29382e23ef" class="bulleted-list"><li style="list-style-type:disc">代码行数：~15</li></ul><p id="1811e77d-f823-8083-9e93-d1fbb6bd54e8" class="">
+</p><h2 id="1811e77d-f823-80fd-b19c-cfb11f0096bd" class=""> <mark class="highlight-blue"><code>add [file name]</code></mark><mark class="highlight-blue">   </mark></h2><ul id="1811e77d-f823-80d2-be7e-c82aea5fd912" class="bulleted-list"><li style="list-style-type:disc">描述：将一个当前文件的复制加入 staging area。如果该文件已经存在于 <mark class="highlight-pink">staging area</mark>，则直接覆盖旧版本。<mark class="highlight-pink">staging area</mark> 存在于 <mark class="highlight-blue"><code>.gitlet</code></mark> 中。如果该文件与前一个 <mark class="highlight-pink">commit</mark> 的版本完全一致，则不将其加入 <mark class="highlight-pink">staging area</mark> 并将该文件从 <mark class="highlight-pink">staging area</mark> 中去除。</li></ul><ul id="1811e77d-f823-8083-b6cd-c19f6dc33d2b" class="bulleted-list"><li style="list-style-type:disc">运行时间：最坏情况与被加入文件大小成线性，O(lg N)其中 N 为 <mark class="highlight-pink">commit</mark> 的文件数</li></ul><ul id="1811e77d-f823-80b0-bd77-d198f2222f69" class="bulleted-list"><li style="list-style-type:disc">错误<ul id="1811e77d-f823-805e-a2b7-edecaf0a8540" class="bulleted-list"><li style="list-style-type:circle">如果文件不存在，输出错误信息 <mark class="highlight-yellow"><code>File does not exist.</code></mark><mark class="highlight-yellow"> </mark></li></ul></li></ul><ul id="1811e77d-f823-80b6-b39c-c10844e2077d" class="bulleted-list"><li style="list-style-type:disc">代码行数：~20</li></ul><p id="1811e77d-f823-80ce-b7ce-dd3e41548597" class="">
+</p><h2 id="1811e77d-f823-80c4-873c-f5a86ccad07c" class=""> <mark class="highlight-blue"><code>commit [message]</code></mark><mark class="highlight-blue">   </mark></h2><ul id="1811e77d-f823-809c-8506-c26c0900b8ea" class="bulleted-list"><li style="list-style-type:disc">描述：<ul id="1811e77d-f823-801b-a0b9-d88dcabae909" class="bulleted-list"><li style="list-style-type:circle">创建一个新的 <mark class="highlight-pink">commit</mark>，其储存的文件初始与上一个 <mark class="highlight-pink">commit</mark> 一致，在此基础上增加更新内容，时间戳和信息也有所不同；</li></ul><ul id="1811e77d-f823-8064-b0e7-da04d888dc2d" class="bulleted-list"><li style="list-style-type:circle">在 <mark class="highlight-blue"><code>commit</code></mark> 完成之后，清空 <mark class="highlight-pink">staging area</mark>；</li></ul><ul id="1811e77d-f823-80a4-99dd-c6a241edb752" class="bulleted-list"><li style="list-style-type:circle"> <mark class="highlight-blue"><code>commit</code></mark> 不对工作仓库中的内容进行任何更改，只更改 <mark class="highlight-blue"><code>.gitlet</code></mark> ，因此在  <mark class="highlight-blue"><code>add</code></mark> 或 <mark class="highlight-blue"><code>rm</code></mark> 之后，对文件本身的更改不影响下一次 <mark class="highlight-blue"><code>commit</code></mark> ；</li></ul><ul id="1811e77d-f823-8086-a54f-deb3fa83139e" class="bulleted-list"><li style="list-style-type:circle">新的 <mark class="highlight-pink">commit</mark> 应该加在 <mark class="highlight-pink">commit树</mark> 上；</li></ul><ul id="1811e77d-f823-8007-8a99-cc85f12a009e" class="bulleted-list"><li style="list-style-type:circle">新的 <mark class="highlight-pink">commit</mark> 变为最新的 <mark class="highlight-pink">commit</mark>，并且 <mark class="highlight-pink">head</mark> 指针指向它；</li></ul><ul id="1811e77d-f823-8046-add9-d1640a008b60" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-pink">commit</mark> 必须包含日期和时间元信息；</li></ul><ul id="1811e77d-f823-80b8-adec-d4325913bcb6" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-pink">commit</mark> 包含被用户指定的日志消息，在命令中只占一个 <mark class="highlight-teal"><code>args</code></mark>参数;</li></ul><ul id="1811e77d-f823-80c0-b4f7-f5f2f80ed942" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-pink">commit</mark> 通过 SHA-1 id辨别。</li></ul></li></ul><ul id="1811e77d-f823-8076-a46d-e8f158fe0da3" class="bulleted-list"><li style="list-style-type:disc">运行时间：不劣于与跟踪文件总大小的线性关系</li></ul><ul id="1811e77d-f823-80d5-be17-edd3d8d4246f" class="bulleted-list"><li style="list-style-type:disc">运行空间：不应增长多于跟踪文件的总大小（使用 <mark class="highlight-pink">Blob</mark> 和 SHA-1 跟踪文件，而非再复制一份）</li></ul><ul id="1811e77d-f823-8069-9a57-d193db5aaa77" class="bulleted-list"><li style="list-style-type:disc">错误<ul id="ce8f529a-de68-4a8d-bd71-9ebace1704c1" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-default">如果没有文件在 </mark><mark class="highlight-pink">staging area</mark><mark class="highlight-default">，输出错误信息 </mark><mark class="highlight-yellow"><code>No changes added to the commit.</code></mark><mark class="highlight-yellow"> </mark></li></ul><ul id="1811e77d-f823-801d-b11c-d69bd7a0532a" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-default">如果输入的日志消息不是非空字符串，输出错误信息 </mark><mark class="highlight-yellow"><code>Please enter a commit message.</code></mark></li></ul></li></ul><ul id="1811e77d-f823-804d-885a-ef63b8da2014" class="bulleted-list"><li style="list-style-type:disc">代码行数：~35</li></ul><p id="1811e77d-f823-80de-8a73-f03f24ace79e" class="">
+</p><h2 id="1811e77d-f823-800b-8a5c-c8482f2bb18b" class=""> <mark class="highlight-blue"><code>rm [file name]</code></mark><mark class="highlight-blue">    </mark></h2><ul id="1811e77d-f823-800a-bef3-e752c11e0337" class="bulleted-list"><li style="list-style-type:disc">描述：<ul id="1811e77d-f823-8054-988f-f4b478513a43" class="bulleted-list"><li style="list-style-type:circle">如果该文件处于 <mark class="highlight-pink">staging area</mark>，将该文件从 <mark class="highlight-pink">staging area</mark> 中移除；</li></ul><ul id="1811e77d-f823-8045-8245-f53814faee88" class="bulleted-list"><li style="list-style-type:circle">如果该文件在之前的 <mark class="highlight-pink">commit</mark> 中已被跟踪，则标记为删除，并在用户尚未删除它的情况下将该文件从工作仓库中移除。</li></ul></li></ul><ul id="1811e77d-f823-80d8-859a-db66892bb50c" class="bulleted-list"><li style="list-style-type:disc">运行时间：O(1)</li></ul><ul id="1811e77d-f823-8074-96ff-e311f7961fb0" class="bulleted-list"><li style="list-style-type:disc">错误<ul id="22f6edff-1f6a-4a5d-8f7a-1f6f3c93b801" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-default">如果文件既没有被暂存也没有被 </mark><mark class="highlight-pink">head</mark><mark class="highlight-default"> 指向的 </mark><mark class="highlight-pink">commit</mark><mark class="highlight-default"> 跟踪，输出错误信息 </mark><mark class="highlight-yellow"><code>No reason to remove the file.</code></mark></li></ul></li></ul><ul id="1811e77d-f823-8084-9a3b-d0f1506f6924" class="bulleted-list"><li style="list-style-type:disc">代码行数：~20</li></ul><p id="1811e77d-f823-8084-9ed0-e1edbe18f787" class="">
+</p><h2 id="1811e77d-f823-8073-8e7b-dc33a5a90a71" class=""> <mark class="highlight-blue"><code>log</code></mark><mark class="highlight-blue">   </mark></h2><ul id="1811e77d-f823-80b4-8bc1-cf5a6b41b4b4" class="bulleted-list"><li style="list-style-type:disc">描述： <ul id="1811e77d-f823-8051-98dd-f07c753b4019" class="bulleted-list"><li style="list-style-type:circle">从当前 <mark class="highlight-pink">head</mark> 指向的 <mark class="highlight-pink">commit </mark>开始，显示每一个 <mark class="highlight-pink">commit </mark>的信息，直到 <mark class="highlight-blue"><code>initial commit</code></mark>；</li></ul><ul id="1811e77d-f823-8017-a96b-c4decda8188b" class="bulleted-list"><li style="list-style-type:circle">格式<br/><br/><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1821e77d-f823-80be-85d6-f8fcce854031" class="code"><code class="language-Markdown">===
+commit a0da1ea5a15ab613bf9961fd86f010cf74c7ee48
+Date: Thu Nov 9 20:00:05 2017 -0800
+A commit message.
+
+===
+commit 3e8bf1d794ca2e9ef8a4007275acf3751c7170ff
+Date: Thu Nov 9 17:01:33 2017 -0800
+Another commit message.
+
+===
+commit e881c9575d180a215d1a636545b8fd9abfb1d2bb
+Date: Wed Dec 31 16:00:00 1969 -0800
+initial commit</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1821e77d-f823-805d-a8ee-dafebdd94971" class="code"><code class="language-Markdown">===
+commit 3e8bf1d794ca2e9ef8a4007275acf3751c7170ff
+Merge: 4975af1 2c1ead1
+Date: Sat Nov 11 12:30:00 2017 -0800
+Merged development into master.
+</code></pre></li></ul></li></ul><ul id="1811e77d-f823-8084-ba84-df69f9d56658" class="bulleted-list"><li style="list-style-type:disc">运行时间：与 <mark class="highlight-pink">head</mark> 的历史 <mark class="highlight-pink">commit</mark> 数量成线性</li></ul><ul id="1811e77d-f823-80d7-b6d7-c5f60036838f" class="bulleted-list"><li style="list-style-type:disc">错误：无</li></ul><ul id="1811e77d-f823-80e2-9316-d815421db425" class="bulleted-list"><li style="list-style-type:disc">代码行数：~20</li></ul><p id="1811e77d-f823-8051-ae5f-f8f770edc402" class="">
+</p><h2 id="1811e77d-f823-8056-9ffc-ffb6dcb24c48" class=""> <mark class="highlight-blue"><code>global-log</code></mark><mark class="highlight-blue">   </mark></h2><ul id="1811e77d-f823-803a-977b-d00e2d8392d5" class="bulleted-list"><li style="list-style-type:disc">描述：以类似于 <mark class="highlight-blue"><code>log</code></mark> 的格式显示所有的历史 <mark class="highlight-pink">commit </mark>，无需顺序。（使用 <mark class="highlight-teal"><code>gitlet.Utils</code></mark> 中的方法）</li></ul><ul id="1811e77d-f823-802d-98ef-c2bf7dd3d1e5" class="bulleted-list"><li style="list-style-type:disc">运行时间：与历史 <mark class="highlight-pink">commit</mark> 数量成线性</li></ul><ul id="1811e77d-f823-807e-a37f-f390e7a826fa" class="bulleted-list"><li style="list-style-type:disc">错误：无</li></ul><ul id="1811e77d-f823-805d-8cc0-cf66095d2d70" class="bulleted-list"><li style="list-style-type:disc">代码行数：~10</li></ul><p id="1811e77d-f823-80fb-81f7-c8cbf8a950f1" class="">
+</p><h2 id="1811e77d-f823-80bc-82ab-d5283f13d8d2" class=""> <mark class="highlight-blue"><code>find [commit message]</code></mark><mark class="highlight-blue">   </mark></h2><ul id="1811e77d-f823-80be-908d-d0069619690d" class="bulleted-list"><li style="list-style-type:disc">描述：显示所有 <mark class="highlight-pink">commit message</mark> 与指定消息相同的 <mark class="highlight-pink">commit </mark>的 <mark class="highlight-pink">id</mark>，每个一行。（使用 <mark class="highlight-teal"><code>gitlet.Utils</code></mark> 中的方法）</li></ul><ul id="1811e77d-f823-807a-903e-c8f36e8fd5dc" class="bulleted-list"><li style="list-style-type:disc">运行时间：与历史 <mark class="highlight-pink">commit</mark> 数量成线性</li></ul><ul id="1811e77d-f823-80df-8a5c-f6d4bd48180f" class="bulleted-list"><li style="list-style-type:disc">错误<ul id="a130c013-5858-4bbe-9b2c-e2701e43b011" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-default">如果没有这样的 </mark><mark class="highlight-pink">commit</mark><mark class="highlight-default"> 存在，输出错误信息 </mark><mark class="highlight-yellow"><code>Found no commit with that message.</code></mark></li></ul></li></ul><ul id="1811e77d-f823-803f-9ff9-f64366a0a5d4" class="bulleted-list"><li style="list-style-type:disc">代码行数：~15</li></ul><p id="1811e77d-f823-80ea-8298-ed54a004089e" class="">
+</p><h2 id="1811e77d-f823-807f-b9d7-fa2cde14f205" class=""> <mark class="highlight-blue"><code>status</code></mark><mark class="highlight-blue">   </mark></h2><ul id="1811e77d-f823-801d-b8c5-f8b19a8d2429" class="bulleted-list"><li style="list-style-type:disc">描述：<ul id="1821e77d-f823-8054-a6e1-c37b5083f8da" class="bulleted-list"><li style="list-style-type:circle">显示当前存在的所有 <mark class="highlight-pink">branch</mark>，使用 <mark class="highlight-blue"><code>*</code></mark> 标记当前 <mark class="highlight-pink">branch</mark>；</li></ul><ul id="1821e77d-f823-80ee-a466-df103b59dc86" class="bulleted-list"><li style="list-style-type:circle">显示<mark class="highlight-pink">暂存</mark>的文件，每个文件名一行；</li></ul><ul id="1821e77d-f823-80b3-bae6-f81332a63015" class="bulleted-list"><li style="list-style-type:circle">显示<mark class="highlight-pink">移除</mark>的文件，每个文件名一行；</li></ul><ul id="1821e77d-f823-80a9-8077-c3dad85bb186" class="bulleted-list"><li style="list-style-type:circle">显示所有的未暂存更改文件，括号内显示被删除或被修改，每个文件名一行。未暂存更改指的是：<ul id="1821e77d-f823-803d-8954-c2ce82b42449" class="bulleted-list"><li style="list-style-type:square">在 <mark class="highlight-pink">current commit</mark> 中被跟踪，之后被更改，但是没有被暂存；</li></ul><ul id="1821e77d-f823-8074-84a6-db3b92cba012" class="bulleted-list"><li style="list-style-type:square">已经被暂存，但是暂存内容与工作仓库内容不同；</li></ul><ul id="1821e77d-f823-8041-b098-d2fde98b8ffd" class="bulleted-list"><li style="list-style-type:square">已经被暂存，但是已在工作仓库中被删除；</li></ul><ul id="1821e77d-f823-8042-b9a6-e762c4bcf5fa" class="bulleted-list"><li style="list-style-type:square">在 <mark class="highlight-pink">current commit</mark> 中被跟踪，没有被标记为删除，但是已在工作仓库中被删除。</li></ul></li></ul><ul id="1821e77d-f823-80ff-bb5b-c79f02291bf2" class="bulleted-list"><li style="list-style-type:circle">显示所有的未跟踪文件，每个文件名一行。未跟踪指的是：<ul id="1821e77d-f823-80bd-870c-f45ec90b77bd" class="bulleted-list"><li style="list-style-type:square">之前未跟踪的文件没有被加入 <mark class="highlight-pink">staging area</mark>；</li></ul><ul id="1821e77d-f823-8040-a3aa-c3ed74b70d44" class="bulleted-list"><li style="list-style-type:square">被标记为<mark class="highlight-pink">删除</mark>的文件在 Gitlet 不知情的情况下被重新创建。</li></ul></li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1821e77d-f823-804c-a124-ca96d446d298" class="code"><code class="language-Markdown">=== Branches ===
+*master
+other-branch
+  
+=== Staged Files ===
+wug.txt
+wug2.txt
+  
+=== Removed Files ===
+goodbye.txt
+  
+=== Modifications Not Staged For Commit ===
+junk.txt (deleted)
+wug3.txt (modified)
+  
+=== Untracked Files ===
+random.stuff</code></pre></li></ul><ul id="1811e77d-f823-8068-91d2-f4d6e97e8b51" class="bulleted-list"><li style="list-style-type:disc">运行时间：仅依赖于工作仓库中的数据、<mark class="highlight-pink">staging area</mark> 中文件数量以及 <mark class="highlight-pink">branch</mark> 总数</li></ul><ul id="1811e77d-f823-8072-b1ab-dccaf4c8054b" class="bulleted-list"><li style="list-style-type:disc">错误：无</li></ul><ul id="1811e77d-f823-80ab-a689-e4f2e9f986d4" class="bulleted-list"><li style="list-style-type:disc">代码行数：~45</li></ul><p id="1811e77d-f823-8094-88fe-fb1a52911418" class="">
+</p><h2 id="1811e77d-f823-8068-b11f-e3c9508111a2" class=""> <mark class="highlight-blue"><code>checkout</code></mark><mark class="highlight-blue">   </mark></h2><ul id="1821e77d-f823-8032-b7cc-eec7eeda3382" class="bulleted-list"><li style="list-style-type:disc">使用：<ol type="1" id="1821e77d-f823-80cd-bbf0-fd919fa53040" class="numbered-list" start="1"><li><mark class="highlight-blue"><code>checkout -- [file name]</code></mark></li></ol><ol type="1" id="1821e77d-f823-8038-a3f5-e2c55237b7db" class="numbered-list" start="2"><li><mark class="highlight-blue"><code>checkout [commit id] -- [file name]</code></mark></li></ol><ol type="1" id="1821e77d-f823-800b-8623-c0ac7b45393d" class="numbered-list" start="3"><li><mark class="highlight-blue"><code>checkout [branch name]</code></mark></li></ol></li></ul><ul id="1811e77d-f823-80f8-8010-c2b583d7e170" class="bulleted-list"><li style="list-style-type:disc">描述：<ol type="1" id="1821e77d-f823-80b3-84ed-e9b77a031352" class="numbered-list" start="1"><li>将<mark class="highlight-pink"> head commit</mark> 中的对应文件移动到工作仓库中，若已存在同名文件则覆写，不暂存新版本的文件。</li></ol><ol type="1" id="1821e77d-f823-8010-90ab-fe9f90d7b7f7" class="numbered-list" start="2"><li>将对应 <mark class="highlight-pink">id</mark> 的 <mark class="highlight-pink">commit </mark>中的对应文件移动到工作仓库中，若已存在同名文件则覆写，不暂存新版本的文件； <mark class="highlight-blue"><code>[commit id]</code></mark><mark class="highlight-blue"> </mark>需要支持40个字符以下的缩写。</li></ol><ol type="1" id="1821e77d-f823-806f-bb89-f31b40e33d75" class="numbered-list" start="3"><li>将给出 <mark class="highlight-pink">branch </mark>的 <mark class="highlight-pink">commit </mark>中的所有文件移动到工作仓库中，覆写已存在的同名文件；将给出的 <mark class="highlight-pink">branch</mark> 作为当前分支（<mark class="highlight-pink">HEAD</mark>）；所有在当前分支跟踪的、但在指定 <mark class="highlight-pink">branch </mark>没有被跟踪的文件都被删除；除非指定 <mark class="highlight-pink">branch</mark> 是当前 <mark class="highlight-pink">branch</mark>，否则清空 <mark class="highlight-pink">staging area</mark>。</li></ol></li></ul><ul id="1811e77d-f823-8083-9a16-e72b2f085cb1" class="bulleted-list"><li style="list-style-type:disc">运行时间：<ol type="1" id="1821e77d-f823-801a-9a96-f837c312c47b" class="numbered-list" start="1"><li>与指定文件大小成线性</li></ol><ol type="1" id="1821e77d-f823-8046-aa4c-d7ec3d81384b" class="numbered-list" start="2"><li>与指定 <mark class="highlight-pink">commit</mark> 文件总大小成线性；<br/>与 <br/><mark class="highlight-pink">commit</mark> 总数和 <mark class="highlight-pink">branch </mark>总数成常数关系（使用 HashMap）；</li></ol></li></ul><ul id="1811e77d-f823-80bf-b40b-ec934603f30f" class="bulleted-list"><li style="list-style-type:disc">错误<ol type="1" id="1821e77d-f823-8004-acbb-f6eecbdbcb38" class="numbered-list" start="1"><li><mark class="highlight-default">如果指定 </mark><mark class="highlight-pink">id </mark><mark class="highlight-default">的 </mark><mark class="highlight-pink">commit </mark><mark class="highlight-default">不存在，输出错误信息 </mark><mark class="highlight-yellow"><code>No commit with that id exists.</code></mark></li></ol><ol type="1" id="3d398231-5f3d-44ae-99ee-1fabc9259d39" class="numbered-list" start="2"><li><mark class="highlight-default">如果该文件在指定 </mark><mark class="highlight-pink">commit</mark><mark class="highlight-default"> 中不存在，输出错误信息 </mark><mark class="highlight-yellow"><code>File does not exist in that commit.</code></mark></li></ol><ol type="1" id="1821e77d-f823-8060-91da-e7a4638cb984" class="numbered-list" start="3"><li><mark class="highlight-default">如果指定 </mark><mark class="highlight-pink">id</mark><mark class="highlight-default"> 的 </mark><mark class="highlight-pink">branch</mark><mark class="highlight-default"> 不存在，输出错误信息 </mark><mark class="highlight-yellow"><code>No such branch exists.</code></mark><mark class="highlight-yellow"> </mark><mark class="highlight-default">；如果指定的 </mark><mark class="highlight-pink">branch</mark><mark class="highlight-default">就是当前 </mark><mark class="highlight-pink">branch</mark><mark class="highlight-default">，输出 </mark><mark class="highlight-yellow"><code>No need to checkout the current branch.</code></mark><mark class="highlight-default">；如果一个工作中文件还未被跟踪、会被 </mark><mark class="highlight-blue"><code>checkout</code></mark><mark class="highlight-default"> 操作覆写，输出 </mark><mark class="highlight-yellow"><code>There is an untracked file in the way; delete it, or add and commit it first.</code></mark></li></ol></li></ul><ul id="1811e77d-f823-805a-8474-ca3eb8b3ac4c" class="bulleted-list"><li style="list-style-type:disc">代码行数：<ol type="1" id="1821e77d-f823-8065-86c0-f51fd1d6e5f1" class="numbered-list" start="1"><li>~15</li></ol><ol type="1" id="1821e77d-f823-805a-a701-ec4a2fbc03c0" class="numbered-list" start="2"><li>~5</li></ol><ol type="1" id="1821e77d-f823-80ff-9ee1-f0d8ff5b2071" class="numbered-list" start="3"><li>~15</li></ol></li></ul><p id="1821e77d-f823-80df-abbf-e2ac48e6a177" class="">
+</p><h2 id="1821e77d-f823-8086-8f30-eb741109b4f6" class=""> <mark class="highlight-blue"><code>branch [branch name]</code></mark><mark class="highlight-blue">   </mark></h2><ul id="1821e77d-f823-800c-8f25-c443537a0c27" class="bulleted-list"><li style="list-style-type:disc">描述：新建一个以给定名称命名的 <mark class="highlight-pink">branch</mark>，将其指向 <mark class="highlight-pink">head commit</mark>，不立即切换到新建分支。</li></ul><ul id="1821e77d-f823-8053-89d3-d3682ed144ed" class="bulleted-list"><li style="list-style-type:disc">运行时间：O(1)</li></ul><ul id="1821e77d-f823-80c1-8265-f80ab5f70e8b" class="bulleted-list"><li style="list-style-type:disc">错误<ul id="3aae79e8-875b-4e96-8390-ae5a811d943f" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-default">如果已存在同名分支，输出错误信息 </mark><mark class="highlight-yellow"><code>A branch with that name already exists.</code></mark></li></ul></li></ul><ul id="1821e77d-f823-80ba-a6da-fb6f0a3426bc" class="bulleted-list"><li style="list-style-type:disc">代码行数：~10</li></ul><p id="1821e77d-f823-8028-a39f-d698da03008e" class="">
+</p><h2 id="1821e77d-f823-80e9-9bdd-cc0f8209544f" class=""> <mark class="highlight-blue"><code>rm-branch [branch name]</code></mark><mark class="highlight-blue">   </mark></h2><ul id="1821e77d-f823-800c-9406-c9b6e12bdaf3" class="bulleted-list"><li style="list-style-type:disc">描述：删除指定名称的 <mark class="highlight-pink">branch</mark>。</li></ul><ul id="1821e77d-f823-806a-91f2-fad2af7b19e7" class="bulleted-list"><li style="list-style-type:disc">运行时间：O(1)</li></ul><ul id="1821e77d-f823-806f-b646-ef98814a948f" class="bulleted-list"><li style="list-style-type:disc">错误<ul id="2132d695-d705-4b3c-9958-aeab73d64122" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-default">如果该名称分支不存在，输出错误信息 </mark><mark class="highlight-yellow"><code>A branch with that name does not exist.</code></mark></li></ul><ul id="1821e77d-f823-802c-95b5-f16c806a90c9" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-default">如果要删除的分支是当前分支，输出错误信息 </mark><mark class="highlight-yellow"><code>Cannot remove the current branch.</code></mark></li></ul></li></ul><ul id="1821e77d-f823-80cd-a596-de2f5c278a0f" class="bulleted-list"><li style="list-style-type:disc">代码行数：~15</li></ul><p id="1821e77d-f823-805a-8c0f-c26d329a0c10" class="">
+</p><h2 id="1821e77d-f823-8066-906f-c6bf8c947bb8" class=""> <mark class="highlight-blue"><code>reset [commit id]</code></mark><mark class="highlight-blue">   </mark></h2><ul id="1821e77d-f823-80f5-a6ff-e84c3ef7569b" class="bulleted-list"><li style="list-style-type:disc">描述：<ul id="1821e77d-f823-80c2-bef4-d75f83b8af60" class="bulleted-list"><li style="list-style-type:circle">将所有给定 <mark class="highlight-pink">commit</mark> 跟踪的文件版本取出；</li></ul><ul id="1821e77d-f823-8002-b2dd-c86d32e248bc" class="bulleted-list"><li style="list-style-type:circle">移除所有未在指定 <mark class="highlight-pink">commit </mark>中出现的已跟踪文件；</li></ul><ul id="1821e77d-f823-80a3-9683-fd48511bd7ac" class="bulleted-list"><li style="list-style-type:circle">将当前分支的 <mark class="highlight-pink">head </mark>移动到指定 <mark class="highlight-pink">commit</mark> 上；</li></ul><ul id="1821e77d-f823-80d8-958a-f1bfd10aa564" class="bulleted-list"><li style="list-style-type:circle">与 <mark class="highlight-blue"><code>checkout</code></mark> 同样的缩写支持要求。</li></ul></li></ul><ul id="1821e77d-f823-80ea-82a7-e40106c61652" class="bulleted-list"><li style="list-style-type:disc">运行时间：与指定 <mark class="highlight-pink">commit </mark>含有文件数成线性，与 <mark class="highlight-pink">commit </mark>总数无关。</li></ul><ul id="1821e77d-f823-8079-978f-d91206191b68" class="bulleted-list"><li style="list-style-type:disc">错误<ul id="be7574fd-c72d-457c-8044-aa7108dc20d6" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-default">如果指定 </mark><mark class="highlight-pink">id</mark><mark class="highlight-default"> 的 </mark><mark class="highlight-pink">commit </mark><mark class="highlight-default">不存在，输出错误信息 </mark><mark class="highlight-yellow"><code>No commit with that id exists.</code></mark></li></ul><ul id="18c1e77d-f823-8092-a719-e49da4288d01" class="bulleted-list"><li style="list-style-type:circle">如果工作仓库中存在未跟踪文件会被 <mark class="highlight-blue"><code>reset</code></mark><mark class="highlight-blue"> </mark>命令覆写，输出错误信息 <mark class="highlight-yellow"><code>There is an untracked file in the way; delete it, or add and commit it first.</code></mark></li></ul></li></ul><ul id="1821e77d-f823-8076-8070-df7a11f4bb1b" class="bulleted-list"><li style="list-style-type:disc">代码行数：~10</li></ul><h2 id="1821e77d-f823-80ea-8f15-d4dc3ad44108" class=""> <mark class="highlight-blue"><code>merge [branch name]</code></mark><mark class="highlight-blue">   </mark></h2><ul id="1821e77d-f823-8074-b5c1-f37fce131b3e" class="bulleted-list"><li style="list-style-type:disc">描述：将指定 <mark class="highlight-pink">id</mark> 的 <mark class="highlight-pink">branch </mark>合并到当前 <mark class="highlight-pink">branch</mark>。<ol type="1" id="1821e77d-f823-80db-b914-ccd234ce854d" class="numbered-list" start="1"><li>如果分裂点正是指定的 <mark class="highlight-pink">branch</mark>，直接输出 <mark class="highlight-yellow"><code>Given branch is an ancestor of the current branch.</code></mark> ；</li></ol><ol type="1" id="1831e77d-f823-8068-af4f-e1838b206faf" class="numbered-list" start="2"><li>如果分裂点就是当前所在 <mark class="highlight-pink">branch</mark>，则 <mark class="highlight-blue"><code>checkout</code></mark> 指定 <mark class="highlight-pink">branch</mark>，输出<mark class="highlight-yellow"><code>Current branch fast-forwarded.</code></mark><mark class="highlight-yellow"> </mark>；</li></ol><ol type="1" id="1831e77d-f823-8049-8a87-ddaa682b27db" class="numbered-list" start="3"><li>所有在分裂点之后的在指定 <mark class="highlight-pink">branch </mark>中被修改、但是没有在当前 <mark class="highlight-pink">branch </mark>修改的文件需要被转换成指定 <mark class="highlight-pink">branch</mark> 的版本，然后全部自动<mark class="highlight-pink">暂存</mark>；</li></ol><ol type="1" id="1831e77d-f823-80f9-8f0a-eeaf6cfe23f2" class="numbered-list" start="4"><li>在当前 <mark class="highlight-pink">branch </mark>被修改、但是在指定 <mark class="highlight-pink">branch </mark>中没有被修改的文件保持现状；</li></ol><ol type="1" id="1831e77d-f823-80f4-8754-f735ae2adb67" class="numbered-list" start="5"><li>在两个 <mark class="highlight-pink">branch</mark> 中被以相同方式修改的文件保持现状；如果工作仓库中存在一个在不同分支均被移除的同名文件，继续保持未跟踪状态；</li></ol><ol type="1" id="1831e77d-f823-802a-a17b-e2dc03da813f" class="numbered-list" start="6"><li>在分裂点未出现、只在当前 <mark class="highlight-pink">branch </mark>出现的文件保持现状；</li></ol><ol type="1" id="1831e77d-f823-8002-bf4c-c221ed6b258f" class="numbered-list" start="7"><li>在分裂点未出现、只在指定 <mark class="highlight-pink">branch</mark> 出现的文件应该被 <mark class="highlight-blue"><code>checkout</code></mark><mark class="highlight-blue"> </mark>然后<mark class="highlight-pink">暂存</mark>；</li></ol><ol type="1" id="1831e77d-f823-80cc-bbdb-c88c4a8dbc96" class="numbered-list" start="8"><li>在分裂点中出现、在当前 <mark class="highlight-pink">branch</mark> 未修改、在指定 <mark class="highlight-pink">branch </mark>中不存在的文件应该被移除；</li></ol><ol type="1" id="1831e77d-f823-80f4-be83-f9966ed70fb9" class="numbered-list" start="9"><li>在分裂点中出现、在指定 <mark class="highlight-pink">branch</mark> 未修改、在当前 <mark class="highlight-pink">branch </mark>中不存在的文件应该维持现状；</li></ol><ol type="1" id="1831e77d-f823-80b9-b404-e2aaffc63322" class="numbered-list" start="10"><li>两个 branch 中以不同方式修改的同一文件存在冲突，存在冲突的情况：<ul id="1831e77d-f823-804d-8121-ca78f24cb054" class="bulleted-list"><li style="list-style-type:disc">两个文件都被改变了内容，且彼此不同；</li></ul><ul id="1831e77d-f823-808b-aa84-f89049e1decd" class="bulleted-list"><li style="list-style-type:disc">其中一个文件的内容被改变，另一个文件被删除；</li></ul><ul id="1831e77d-f823-80e4-8423-cf2961629aab" class="bulleted-list"><li style="list-style-type:disc">文件在分支点不存在，在两个分支中有不同的内容。</li></ul><p id="1831e77d-f823-8070-9a71-faee131f7e93" class="">将存在冲突的文件内容替换为如下内容：</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1831e77d-f823-8088-bbd8-d049c452fe72" class="code"><code class="language-CSS">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+contents of file in current branch
+=======
+contents of file in given branch
+&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+</code></pre><p id="1831e77d-f823-80ac-9b8b-fb51ddb13ac3" class="">接下来根据此前的暂存更新自动 <mark class="highlight-blue"><code>commit</code></mark> ，<mark class="highlight-pink">commit message </mark>为 <mark class="highlight-yellow"><code>Merged [given branch name] into [current branch name].</code></mark><mark class="highlight-yellow"> </mark>；如果合并存在冲突，输出信息 <mark class="highlight-yellow"><code>Encountered a merge conflict.</code></mark><mark class="highlight-yellow"> </mark>合并的 <mark class="highlight-pink">commit</mark> 将两个被合并 <mark class="highlight-pink">branch</mark> 的 <mark class="highlight-pink">head</mark> 都记作父节点。</p></li></ol></li></ul><ul id="1821e77d-f823-80b6-9850-e45d93696fc9" class="bulleted-list"><li style="list-style-type:disc">运行时间：O(NlgN+D)，其中 N 为两 <mark class="highlight-pink">branch </mark>祖先 <mark class="highlight-pink">commit </mark>总数，D 为这些 <mark class="highlight-pink">commit </mark>文件数据总量</li></ul><ul id="1821e77d-f823-80d6-ab43-f2a4f6ad08f0" class="bulleted-list"><li style="list-style-type:disc">错误<ul id="032383cc-925b-4b0f-8608-722127e26005" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-default">如果暂存区仍有更改，输出错误信息 </mark><mark class="highlight-yellow"><code>You have uncommitted changes.</code></mark></li></ul><ul id="1831e77d-f823-8002-985f-e2b3d67028c1" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-default">如果给定 branch 不存在，输出错误信息 </mark><mark class="highlight-yellow"><code>A branch with that name does not exist.</code></mark></li></ul><ul id="1831e77d-f823-8026-9282-db620e965824" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-default">如果尝试合并当前 branch，输出错误信息 </mark><mark class="highlight-yellow"><code>Cannot merge a branch with itself.</code></mark></li></ul><ul id="1831e77d-f823-8019-bddb-f841767659c3" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-default">如果合并的 commit 没有任何修改导致错误，让 </mark><mark class="highlight-default"><code>commit</code></mark><mark class="highlight-default"> 输出它的错误信息</mark></li></ul><ul id="1831e77d-f823-80a3-bd6c-feeb78ccd738" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-default">如果一个当前 commit 未跟踪的文件会被合并覆写或删除，输出错误信息 </mark><mark class="highlight-yellow"><code>There is an untracked file in the way; delete it, or add and commit it first.</code></mark></li></ul></li></ul><ul id="1821e77d-f823-80e6-bf8f-df710b0595b6" class="bulleted-list"><li style="list-style-type:disc">代码行数：~70</li></ul><p id="1831e77d-f823-8010-ad5f-fae4e398a82b" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
