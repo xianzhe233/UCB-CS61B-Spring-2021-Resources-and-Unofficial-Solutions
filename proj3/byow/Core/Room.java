@@ -2,6 +2,7 @@ package byow.Core;
 
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
+import static byow.Core.World.*;
 
 /**
  * Class for generating rooms and hallways in world.
@@ -22,12 +23,12 @@ public class Room {
      * Verifies if a room can be created.
      */
     static boolean verifyRoom(TETile[][] world, int x, int y, int width, int height) {
-        if ((x + width > World.WIDTH) || (y + height > World.HEIGHT)) {
+        if (!insideWorld(x + width - 1, y + height - 1)) {
             return false;
         }
         for (int row = x - 1; row <= x + width; row++) {
             for (int col = y - 1; col <= y + height; col++) {
-                if (row < 0 || row >= World.WIDTH || col < 0 || col >= World.HEIGHT) {
+                if (!insideWorld(row, col)) {
                     continue;
                 }
                 if (world[row][col] == Tileset.FLOOR) {
@@ -56,12 +57,9 @@ public class Room {
     static int fill(TETile[][] world, int x, int y, int width, int height, TETile tile) {
         int cnt = 0;
         for (int row = x; row < x + width; row++) {
-            if (row >= World.WIDTH || row < 0) {
-                break;
-            }
             for (int col = y; col < y + height; col++) {
-                if (col >= World.HEIGHT || col < 0) {
-                    break;
+                if (!insideWorld(row, col)) {
+                    continue;
                 }
                 if (fill(world, row, col, tile)) {
                     cnt += 1;

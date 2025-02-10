@@ -1,4 +1,6 @@
 package byow.Core;
+import byow.TileEngine.TETile;
+
 import static byow.Core.RandomUtils.*;
 import java.util.Random;
 
@@ -61,7 +63,7 @@ public class DisjointSet {
     public int getMinComponentSize() {
         int minSize = Integer.MAX_VALUE;
         for (int i = 0; i < parent.length; i++) {
-            if (parent[i] == i && size[i] < minSize) {
+            if (parent[i] == i && size[i] < minSize && size[i] > 1) {
                 minSize = size[i];
             }
         }
@@ -78,7 +80,7 @@ public class DisjointSet {
         return maxSize;
     }
 
-    public int[] getMinComponentPoint(Random rand) {
+    public int[] getMinComponentPoint(TETile[][] world, Random rand) {
         int minSize = getMinComponentSize();
         while (true) {
             int i = uniform(rand, 0, parent.length);

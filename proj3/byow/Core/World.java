@@ -20,8 +20,10 @@ public class World {
     public static final int HEIGHT = Engine.HEIGHT;
     private static final int AREA = WIDTH * HEIGHT;
     private static final int MIN_LENGTH = WIDTH > HEIGHT ? HEIGHT : WIDTH;
-    private static final double ROOM_AREA_RATE = 0.4;
-    private static final double FINAL_AREA_RATE = 0.5;
+    private static final double ROOM_AREA_RATE = 0.9;
+    private static final double FINAL_AREA_RATE = 0.9;
+    private static final double TRIGGER_INCREMENT = 0.003;
+
 
     public static TETile[][] createWorld(int seed) {
         TETile[][] world = new TETile[WIDTH][HEIGHT];
@@ -35,7 +37,7 @@ public class World {
 
         createHallways(world, rand, ds);
 
-        cleanUp(world, ds);
+//        cleanUp(world, ds);
         buildWalls(world);
 
         return world;
@@ -51,45 +53,76 @@ public class World {
 
     private static void createRooms(TETile[][] world, Random rand) {
         int currentArea = 0;
-        while ((double) currentArea / (double) AREA < ROOM_AREA_RATE) {
+        double trigger = 0.0;
+        while (currentArea < (ROOM_AREA_RATE - trigger) * AREA) {
             int x = uniform(rand, 0, WIDTH);
             int y = uniform(rand, 0, HEIGHT);
-            int width = (int) (uniform(rand, 0.15, 0.35) * MIN_LENGTH);
-            int height = (int) (uniform(rand, 0.15, 0.35) * MIN_LENGTH);
-            currentArea += createRoom(world, x, y, width, height);
-            System.out.println(width + " " + height);
+            int width = (int) (uniform(rand, 0.20, 0.40) * MIN_LENGTH);
+            int height = (int) (uniform(rand, 0.20, 0.40) * MIN_LENGTH);
+            int newCreated = createRoom(world, x, y, width, height);
+            if (newCreated == 0) {
+                trigger += TRIGGER_INCREMENT;
+            }
+            currentArea += newCreated;
         }
     }
 
     private static void createHallways(TETile[][] world, Random rand, DisjointSet ds) {
         connectAllRooms(world, ds);
-
-        while (ds.getMaxComponentSize() < FINAL_AREA_RATE * AREA) {
-            int[] leastCoordinates = ds.getMinComponentPoint(rand);
+        double trigger = 0.0;
+        while (ds.getMaxComponentSize() < (FINAL_AREA_RATE - trigger) * AREA) {
+            int[] leastCoordinates = ds.getMinComponentPoint(world, rand);
             int x = leastCoordinates[0];
             int y = leastCoordinates[1];
-            System.out.println(x + " " + y);
-            int width;
-            int height;
-            boolean direction = rand.nextBoolean(); // true for horizontal, false for vertical
-            boolean positive = rand.nextBoolean(); // true for positive, false for negative
-            if (direction) {
-                height = uniform(rand, 3, 5);
-                width = (int) (uniform(rand, 0.2, 0.5) * World.WIDTH);
-            } else {
-                width = uniform(rand, 3, 5);
-                height = (int) (uniform(rand, 0.2, 0.5) * World.HEIGHT);
+            trigger += TRIGGER_INCREMENT;
+            if (x == 0 || y == 0) {
+                continue;
             }
-            if (positive) {
-                x -= 1;
-                y -= 1;
+            int direction = uniform(rand, 0, 4); // 0: up, 1: right, 2: down, 3: left
+            int[] deviation = scan(world, x, y, direction, ds);
+            if (deviation == null) {
+                continue;
+            }
+            trigger -= TRIGGER_INCREMENT;
+            int dx = deviation[0];
+            int dy = deviation[1];
+            int width, height;
+            if (dx == 0) {
+                width = uniform(rand, 1, 3);
+                height = Math.abs(dy);
             } else {
-                x -= width;
-                y -= height;
+                width = Math.abs(dx);
+                height = uniform(rand, 1, 3);
+            }
+            if (dx < 0 || dy < 0) {
+                x += dx;
+                y += dy;
             }
             fill(world, x, y, width, height, Tileset.FLOOR);
             connectAllRooms(world, ds);
         }
+    }
+
+    /** Scans the world to see if this hallway can connect two components.
+     *  If it can, Returns the deviation vector. If cannot, return null. */
+    private static int[] scan(TETile[][] world, int x, int y, int direction, DisjointSet ds) {
+        int[] dx = {0, 1, 0, -1};
+        int[] dy = {1, 0, -1, 0};
+        int nx = x, ny = y;
+        while (insideWorld(nx, ny)) {
+            nx += dx[direction];
+            ny += dy[direction];
+            if (!insideWorld(nx, ny)) {
+                return null;
+            }
+            if (world[nx][ny] == Tileset.NOTHING) {
+                continue;
+            }
+            if (!ds.isConnected(x, y, nx, ny)) {
+                return new int[]{nx - x, ny - y};
+            }
+        }
+        return null;
     }
 
     /**
@@ -108,7 +141,7 @@ public class World {
             for (int i = 0; i < 4; i++) {
                 int nx = x + dx[i];
                 int ny = y + dy[i];
-                if (nx >= 0 && nx < WIDTH && ny >= 0 && ny < HEIGHT && !ds.isConnected(x, y, nx, ny)
+                if (insideWorld(nx, ny) && !ds.isConnected(x, y, nx, ny)
                         && world[nx][ny] == Tileset.FLOOR) {
                     ds.union(x, y, nx, ny);
                     xqueue.add(nx);
@@ -151,15 +184,17 @@ public class World {
                     for (int i = 0; i < 8; i++) {
                         int nx = x + dx[i];
                         int ny = y + dy[i];
-                        if (nx >= 0 && nx < WIDTH && ny >= 0 && ny < HEIGHT && world[nx][ny] == Tileset.NOTHING) {
+                        if (insideWorld(nx, ny) && world[nx][ny] == Tileset.NOTHING) {
                             world[nx][ny] = Tileset.WALL;
                         }
                     }
                 }
             }
         }
+    }
 
-
+    public static boolean insideWorld(int x, int y) {
+        return x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT;
     }
 
     public static void main(String[] args) {
