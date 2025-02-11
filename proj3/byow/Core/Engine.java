@@ -51,7 +51,7 @@ public class Engine {
         input = input.toLowerCase();
         int nPos = input.indexOf("n");
         int sPos = input.indexOf("s");
-        int seed = Integer.parseInt(input.substring(nPos + 1, sPos));
+        long seed = Long.parseLong(input.substring(nPos + 1, sPos));
         finalWorldFrame = createWorld(seed);
 
         return finalWorldFrame;

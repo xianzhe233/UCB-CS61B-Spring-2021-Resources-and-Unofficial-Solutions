@@ -25,7 +25,7 @@ public class World {
     private static final double TRIGGER_INCREMENT = 0.003;
 
 
-    public static TETile[][] createWorld(int seed) {
+    public static TETile[][] createWorld(long seed) {
         TETile[][] world = new TETile[WIDTH][HEIGHT];
         worldInit(world);
 
