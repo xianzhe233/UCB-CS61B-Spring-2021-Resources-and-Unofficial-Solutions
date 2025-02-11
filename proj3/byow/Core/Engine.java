@@ -2,6 +2,7 @@ package byow.Core;
 
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
+import static byow.Core.World.*;
 
 public class Engine {
     TERenderer ter = new TERenderer();
@@ -38,7 +39,6 @@ public class Engine {
      * @return the 2D TETile[][] representing the state of the world
      */
     public TETile[][] interactWithInputString(String input) {
-        // TODO: Fill out this method so that it run the engine using the input
         // passed in as an argument, and return a 2D tile representation of the
         // world that would have been drawn if the same inputs had been given
         // to interactWithKeyboard().
@@ -46,7 +46,14 @@ public class Engine {
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
 
-        TETile[][] finalWorldFrame = null;
+        TETile[][] finalWorldFrame;
+
+        input = input.toLowerCase();
+        int nPos = input.indexOf("n");
+        int sPos = input.indexOf("s");
+        int seed = Integer.parseInt(input.substring(nPos + 1, sPos));
+        finalWorldFrame = createWorld(seed);
+
         return finalWorldFrame;
     }
 }
