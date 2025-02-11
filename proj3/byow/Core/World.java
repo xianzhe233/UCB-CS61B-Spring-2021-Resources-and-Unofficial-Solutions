@@ -75,7 +75,7 @@ public class World {
             int x = leastCoordinates[0];
             int y = leastCoordinates[1];
             trigger += TRIGGER_INCREMENT;
-            if (x == 0 || y == 0) {
+            if (x == 0 || x == WIDTH - 1 || y == 0 || y == HEIGHT - 1) {
                 continue;
             }
             int direction = uniform(rand, 0, 4); // 0: up, 1: right, 2: down, 3: left
