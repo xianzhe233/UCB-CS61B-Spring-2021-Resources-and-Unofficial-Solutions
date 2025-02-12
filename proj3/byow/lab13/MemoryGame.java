@@ -70,8 +70,20 @@ public class MemoryGame {
         StdDraw.setFont(new Font("Sans-Serif", Font.BOLD, 30));
         StdDraw.setPenColor(Color.WHITE);
         StdDraw.text(width / 2, height / 2, s);
+        displayInformation();
         StdDraw.show();
         //TODO: If game is not over, display relevant game information at the top of the screen
+    }
+
+    private void displayInformation() {
+        StdDraw.rectangle(0, height - 1, width, 1);
+        StdDraw.setFont(new Font("Sans-Serif", Font.BOLD, 16));
+        StdDraw.text(3, height - 1, "Round: " + round);
+        String instruction = playerTurn ? "Type!" : "Watch!";
+        StdDraw.text(width / 2 - 1, height - 1, instruction);
+        StdDraw.text(width - 4, height - 1, ENCOURAGEMENT[round % ENCOURAGEMENT.length]);
+        // In 61B demonstration, the encouraging phrase changes every time using drawFrame(),
+        // but I think my implementation is more reasonable.
     }
 
     public void flashSequence(String letters) {
@@ -100,10 +112,13 @@ public class MemoryGame {
         round = 1;
         gameOver = false;
         while (!gameOver) {
+            playerTurn = false;
             drawFrame("Round: " + round);
             StdDraw.pause(1000);
             String randomString = generateRandomString(round);
             flashSequence(randomString);
+            playerTurn = true;
+            drawFrame("");
             String userInput = solicitNCharsInput(round);
             if (!userInput.equals(randomString)) {
                 gameOver = true;
