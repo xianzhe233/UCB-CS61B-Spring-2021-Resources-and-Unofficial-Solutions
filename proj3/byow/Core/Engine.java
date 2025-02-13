@@ -2,6 +2,8 @@ package byow.Core;
 
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
+import byow.TileEngine.Tileset;
+import byow.Core.World;
 import edu.princeton.cs.introcs.StdDraw;
 
 import java.awt.*;
@@ -14,26 +16,103 @@ import static byow.Core.World.createWorld;
 
 public class Engine {
     /* Feel free to change the width and height. */
-    public static final int WIDTH = 80;
+    public static final int WIDTH = 120;
     public static final int HEIGHT = 60;
     TERenderer ter = new TERenderer();
-    boolean gamestarted;
+    boolean gamestarted = false;
+    boolean newWorld = false;
+    boolean colonDown = false;
     TETile[][] world;
-
-    public Engine() {
-        ter.initialize(WIDTH, HEIGHT);
-        gamestarted = false;
-    }
+    int avatarX;
+    int avatarY;
 
     /**
      * Method used for exploring a fresh world. This method should handle all inputs,
      * including inputs from the main menu.
      */
     public void interactWithKeyboard() {
-        menu();
+        String input = menu();
+        if (newWorld) {
+            world = createWorld(extractSeed(input.toString()));
+        }
+        locateAvatar(world);
+        StdDraw.pause(500);
+        ter.initialize(WIDTH, HEIGHT);
+        ter.renderFrame(world);
+        while (true) {
+            if (interact()) {
+                ter.renderFrame(world);
+            }
+        }
+
     }
 
-    public void menu() {
+    /** Interacts with keyboard, if changed world, return true. */
+    public boolean interact() {
+        if (StdDraw.hasNextKeyTyped()) {
+            char c = Character.toLowerCase(StdDraw.nextKeyTyped());
+            if (colonDown) {
+                if (c == quitKey) {
+                    saveWorld(world);
+                    System.exit(0);
+                }
+                colonDown = false;
+            }
+            if (c == commandkey) {
+                colonDown = true;
+            } else if (c == leftkey || c == rightkey || c == upkey || c == downkey) {
+                move(c);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void locateAvatar(TETile[][] world) {
+        for (int x = 0; x < WIDTH; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
+                if (world[x][y] == Tileset.AVATAR) {
+                    avatarX = x;
+                    avatarY = y;
+                    return;
+                }
+            }
+        }
+    }
+
+    public void move(char moveKey) {
+        int direction = directionOf(moveKey);
+        int nx = avatarX + dx[direction];
+        int ny = avatarY + dy[direction];
+        if (verifyMove(nx, ny)) {
+            world[avatarX][avatarY] = Tileset.FLOOR;
+            world[nx][ny] = Tileset.AVATAR;
+            avatarX = nx;
+            avatarY = ny;
+        }
+    }
+
+    public int directionOf(char moveKey) {
+        switch (moveKey) {
+            case 'w':
+                return 0;
+            case 'd':
+                return 1;
+            case 's':
+                return 2;
+            case 'a':
+                return 3;
+            default:
+                return -1;
+        }
+    }
+
+    public boolean verifyMove(int x, int y) {
+        return World.insideWorld(x, y) && world[x][y] == Tileset.FLOOR;
+    }
+
+    /** Processes the menu part, returns input string. */
+    public String menu() {
         initMenu();
         StringBuilder input = new StringBuilder();
         while (!gamestarted) {
@@ -42,7 +121,7 @@ public class Engine {
             drawMenuInput(input.toString());
             StdDraw.show();
         }
-        StdDraw.pause(500);
+        return input.toString();
     }
 
     public void initMenu() {
@@ -66,7 +145,6 @@ public class Engine {
         StdDraw.text(WIDTH / 2, menuOptionPos1, "New Game (N)");
         StdDraw.text(WIDTH / 2, menuOptionPos2, "Load Game (L)");
         StdDraw.text(WIDTH / 2, menuOptionPos3, "Quit (Q)");
-
     }
 
     public String buildMenuInput() {
@@ -76,11 +154,22 @@ public class Engine {
             if (c == quitKey) {
                 System.exit(0);
             } else if (c == newGameKey) {
+                if (newWorld || gamestarted) {
+                    continue;
+                }
                 sb.append(Character.toUpperCase(newGameKey));
+                newWorld = true;
             } else if (c == loadGameKey) {
+                if (newWorld) {
+                    continue;
+                }
                 sb.append(Character.toUpperCase(loadGameKey));
+                loadWorld();
                 gamestarted = true;
             } else if (c == savekey) {
+                if (!newWorld || gamestarted) {
+                    continue;
+                }
                 sb.append(Character.toUpperCase(savekey));
                 gamestarted = true;
             } else if (Character.isDigit(c)) {
@@ -92,6 +181,13 @@ public class Engine {
 
     public void drawMenuInput(String s) {
         StdDraw.text(WIDTH / 2, menuInputPos, s);
+    }
+
+    public long extractSeed(String s) {
+        s = s.toLowerCase();
+        int nPos = s.indexOf("n");
+        int sPos = s.indexOf("s");
+        return Long.parseLong(s.substring(nPos + 1, sPos));
     }
 
     /**
@@ -125,10 +221,7 @@ public class Engine {
 
         TETile[][] finalWorldFrame;
 
-        input = input.toLowerCase();
-        int nPos = input.indexOf("n");
-        int sPos = input.indexOf("s");
-        long seed = Long.parseLong(input.substring(nPos + 1, sPos));
+        long seed = extractSeed(input);
         finalWorldFrame = createWorld(seed);
 
         return finalWorldFrame;

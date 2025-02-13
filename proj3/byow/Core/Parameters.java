@@ -26,4 +26,8 @@ public class Parameters {
     static char upkey = 'w';
     static char downkey = 's';
     static char commandkey = ':';
+
+    /** Moving vectors. */
+    static int[] dx = {0, 1, 0, -1};
+    static int[] dy = {1, 0, -1, 0};
 }

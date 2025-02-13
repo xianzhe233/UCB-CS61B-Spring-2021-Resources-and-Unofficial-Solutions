@@ -20,9 +20,9 @@ public class World {
     public static final int HEIGHT = Engine.HEIGHT;
     private static final int AREA = WIDTH * HEIGHT;
     private static final int MIN_LENGTH = WIDTH > HEIGHT ? HEIGHT : WIDTH;
-    private static final double ROOM_AREA_RATE = 0.9;
+    private static final double ROOM_AREA_RATE = 0.8;
     private static final double FINAL_AREA_RATE = 0.9;
-    private static final double TRIGGER_INCREMENT = 0.003;
+    private static final double TRIGGER_INCREMENT = 0.001;
 
 
     public static TETile[][] createWorld(long seed) {
@@ -39,6 +39,8 @@ public class World {
 
 //        cleanUp(world, ds);
         buildWalls(world);
+
+        putAvatar(world, rand);
 
         return world;
     }
@@ -57,8 +59,8 @@ public class World {
         while (currentArea < (ROOM_AREA_RATE - trigger) * AREA) {
             int x = uniform(rand, 0, WIDTH);
             int y = uniform(rand, 0, HEIGHT);
-            int width = (int) (uniform(rand, 0.20, 0.40) * MIN_LENGTH);
-            int height = (int) (uniform(rand, 0.20, 0.40) * MIN_LENGTH);
+            int width = (int) (uniform(rand, 0.15, 0.35) * MIN_LENGTH);
+            int height = (int) (uniform(rand, 0.15, 0.35) * MIN_LENGTH);
             int newCreated = createRoom(world, x, y, width, height);
             if (newCreated == 0) {
                 trigger += TRIGGER_INCREMENT;
@@ -189,6 +191,18 @@ public class World {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private static void putAvatar(TETile[][] world, Random rand) {
+        int x, y;
+        while (true) {
+            x = uniform(rand, 0, WIDTH);
+            y = uniform(rand, 0, HEIGHT);
+            if (world[x][y] == Tileset.FLOOR) {
+                world[x][y] = Tileset.AVATAR;
+                break;
             }
         }
     }
