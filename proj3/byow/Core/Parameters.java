@@ -1,10 +1,15 @@
 package byow.Core;
 
 import java.awt.*;
+import java.io.File;
 
 import static byow.Core.Engine.HEIGHT;
 
 public class Parameters {
+    /** Files */
+    static File worldFile = new File("world.txt");
+
+
     /** Fonts */
     static Font menuTitleFont = new Font("JetBrains Mono", Font.BOLD, 50);
     static Font menuOptionFont = new Font("JetBrains Mono", Font.PLAIN, 30);

@@ -35,7 +35,7 @@ public class Engine {
         if (newWorld) {
             world = createWorld(extractSeed(input.toString()));
         }
-        locateAvatar(world);
+        locateAvatar();
         StdDraw.pause(500);
         ter.initialize(WIDTH, HEIGHT);
         ter.renderFrame(world);
@@ -53,7 +53,7 @@ public class Engine {
             char c = Character.toLowerCase(StdDraw.nextKeyTyped());
             if (colonDown) {
                 if (c == quitKey) {
-                    saveWorld(world);
+                    saveWorld();
                     System.exit(0);
                 }
                 colonDown = false;
@@ -68,12 +68,13 @@ public class Engine {
         return false;
     }
 
-    public void locateAvatar(TETile[][] world) {
+    public void locateAvatar() {
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
-                if (world[x][y] == Tileset.AVATAR) {
+                if (world[x][y].equals(Tileset.AVATAR)) {
                     avatarX = x;
                     avatarY = y;
+//                    System.out.println("Avatar located at: " + x + ", " + y);
                     return;
                 }
             }
@@ -108,7 +109,7 @@ public class Engine {
     }
 
     public boolean verifyMove(int x, int y) {
-        return World.insideWorld(x, y) && world[x][y] == Tileset.FLOOR;
+        return World.insideWorld(x, y) && world[x][y].equals(Tileset.FLOOR);
     }
 
     /** Processes the menu part, returns input string. */
@@ -227,13 +228,21 @@ public class Engine {
         return finalWorldFrame;
     }
 
-    private void saveWorld(TETile[][] world) {
-        File worldFile = new File("world.txt");
+    private void saveWorld() {
         writeObject(worldFile, world);
     }
 
-    private TETile[][] loadWorld() {
-        File worldFile = new File("world.txt");
-        return readObject(worldFile, TETile[][].class);
+    private void loadWorld() {
+        world = readObject(worldFile, TETile[][].class);
+        locateAvatar();
+    }
+
+    private void print() {
+        for (int i = 0; i < HEIGHT; i++) {
+            for (int j = 0; j < WIDTH; j++) {
+                System.out.print(world[j][i].character());
+            }
+            System.out.println();
+        }
     }
 }
