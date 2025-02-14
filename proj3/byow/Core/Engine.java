@@ -40,32 +40,29 @@ public class Engine {
         ter.initialize(WIDTH, HEIGHT);
         ter.renderFrame(world);
         while (true) {
-            if (interact()) {
+            if (StdDraw.hasNextKeyTyped()) {
+                char c = StdDraw.nextKeyTyped();
+                interactWith(c);
                 ter.renderFrame(world);
             }
         }
 
     }
 
-    /** Interacts with keyboard, if changed world, return true. */
-    public boolean interact() {
-        if (StdDraw.hasNextKeyTyped()) {
-            char c = Character.toLowerCase(StdDraw.nextKeyTyped());
-            if (colonDown) {
-                if (c == quitKey) {
-                    saveWorld();
-                    System.exit(0);
-                }
-                colonDown = false;
+    public void interactWith(char c) {
+        c = Character.toLowerCase(c);
+        if (colonDown) {
+            if (c == quitKey) {
+                saveWorld();
+                System.exit(0);
             }
-            if (c == commandkey) {
-                colonDown = true;
-            } else if (c == leftkey || c == rightkey || c == upkey || c == downkey) {
-                move(c);
-                return true;
-            }
+            colonDown = false;
         }
-        return false;
+        if (c == commandkey) {
+            colonDown = true;
+        } else if (c == leftkey || c == rightkey || c == upkey || c == downkey) {
+            move(c);
+        }
     }
 
     public void locateAvatar() {
@@ -188,7 +185,11 @@ public class Engine {
         s = s.toLowerCase();
         int nPos = s.indexOf("n");
         int sPos = s.indexOf("s");
-        return Long.parseLong(s.substring(nPos + 1, sPos));
+        try {
+            return Long.parseLong(s.substring(nPos + 1, sPos));
+        } catch (IndexOutOfBoundsException e) {
+            return -1l;
+        }
     }
 
     /**
@@ -220,12 +221,31 @@ public class Engine {
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
 
-        TETile[][] finalWorldFrame;
-
+        input = input.toLowerCase();
         long seed = extractSeed(input);
-        finalWorldFrame = createWorld(seed);
+        // if seed is -1, then it is not a new game
+        if (seed != -1) {
+            world = createWorld(seed);
+            input = input.substring(input.indexOf("s") + 1);
+        } else {
+            if (input.contains("l")) {
+                loadWorld();
+                if (input.equals("l")) {
+                    return world;
+                }
+                input = input.substring(input.indexOf("l") + 1);
+            } else {
+                return null;
+            }
+        }
 
-        return finalWorldFrame;
+        locateAvatar();
+        for (int i = 0; i < input.length(); i++) {
+            interactWith(input.charAt(i));
+        }
+
+        saveWorld();
+        return world;
     }
 
     private void saveWorld() {
