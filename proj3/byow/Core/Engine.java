@@ -3,11 +3,9 @@ package byow.Core;
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
-import byow.Core.World;
 import edu.princeton.cs.introcs.StdDraw;
 
 import java.awt.*;
-import java.io.File;
 
 import static byow.Core.FileUtils.readObject;
 import static byow.Core.FileUtils.writeObject;
@@ -22,6 +20,7 @@ public class Engine {
     boolean gamestarted = false;
     boolean newWorld = false;
     boolean colonDown = false;
+    boolean gameover = false;
     TETile[][] world;
     int avatarX;
     int avatarY;
@@ -33,28 +32,28 @@ public class Engine {
     public void interactWithKeyboard() {
         String input = menu();
         if (newWorld) {
-            world = createWorld(extractSeed(input.toString()));
+            world = createWorld(extractSeed(input));
         }
         locateAvatar();
-        StdDraw.pause(500);
+        StdDraw.pause(delay);
         ter.initialize(WIDTH, HEIGHT);
         ter.renderFrame(world);
-        while (true) {
+        while (!gameover) {
             if (StdDraw.hasNextKeyTyped()) {
                 char c = StdDraw.nextKeyTyped();
                 interactWith(c);
                 ter.renderFrame(world);
             }
         }
-
+        saveWorld();
     }
 
     public void interactWith(char c) {
         c = Character.toLowerCase(c);
         if (colonDown) {
             if (c == quitKey) {
-                saveWorld();
-                System.exit(0);
+                gameover = true;
+                return;
             }
             colonDown = false;
         }
@@ -71,7 +70,6 @@ public class Engine {
                 if (world[x][y].equals(Tileset.AVATAR)) {
                     avatarX = x;
                     avatarY = y;
-//                    System.out.println("Avatar located at: " + x + ", " + y);
                     return;
                 }
             }
@@ -109,7 +107,9 @@ public class Engine {
         return World.insideWorld(x, y) && world[x][y].equals(Tileset.FLOOR);
     }
 
-    /** Processes the menu part, returns input string. */
+    /**
+     * Processes the menu part, returns input string.
+     */
     public String menu() {
         initMenu();
         StringBuilder input = new StringBuilder();
@@ -123,7 +123,7 @@ public class Engine {
     }
 
     public void initMenu() {
-        StdDraw.setCanvasSize(WIDTH * 16, HEIGHT * 16);
+        StdDraw.setCanvasSize(WIDTH * canvasFactor, HEIGHT * canvasFactor);
         StdDraw.setXscale(0, WIDTH);
         StdDraw.setYscale(0, HEIGHT);
         StdDraw.clear(Color.BLACK);
@@ -188,7 +188,7 @@ public class Engine {
         try {
             return Long.parseLong(s.substring(nPos + 1, sPos));
         } catch (IndexOutOfBoundsException e) {
-            return -1l;
+            return -1L;
         }
     }
 
@@ -226,6 +226,7 @@ public class Engine {
         // if seed is -1, then it is not a new game
         if (seed != -1) {
             world = createWorld(seed);
+            locateAvatar();
             input = input.substring(input.indexOf("s") + 1);
         } else {
             if (input.contains("l")) {
@@ -239,11 +240,12 @@ public class Engine {
             }
         }
 
-        locateAvatar();
         for (int i = 0; i < input.length(); i++) {
             interactWith(input.charAt(i));
+            if (gameover) {
+                break;
+            }
         }
-
         saveWorld();
         return world;
     }

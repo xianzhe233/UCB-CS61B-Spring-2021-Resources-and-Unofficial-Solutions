@@ -192,6 +192,11 @@ public class TETile implements Serializable {
     }
 
     @Override
+    public int hashCode() {
+        return hashCode();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (o == this) {
             return true;

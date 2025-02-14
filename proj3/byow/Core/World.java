@@ -105,8 +105,10 @@ public class World {
         }
     }
 
-    /** Scans the world to see if this hallway can connect two components.
-     *  If it can, Returns the deviation vector. If cannot, return null. */
+    /**
+     * Scans the world to see if this hallway can connect two components.
+     * If it can, Returns the deviation vector. If cannot, return null.
+     */
     private static int[] scan(TETile[][] world, int x, int y, int direction, DisjointSet ds) {
         int[] dx = {0, 1, 0, -1};
         int[] dy = {1, 0, -1, 0};

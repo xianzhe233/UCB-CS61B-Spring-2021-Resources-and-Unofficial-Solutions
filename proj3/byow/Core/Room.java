@@ -2,7 +2,8 @@ package byow.Core;
 
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
-import static byow.Core.World.*;
+
+import static byow.Core.World.insideWorld;
 
 /**
  * Class for generating rooms and hallways in world.

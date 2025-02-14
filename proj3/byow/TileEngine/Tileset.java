@@ -1,24 +1,25 @@
 package byow.TileEngine;
 
-import java.awt.Color;
+import java.awt.*;
 
 /**
  * Contains constant tile objects, to avoid having to remake the same tiles in different parts of
  * the code.
- *
+ * <p>
  * You are free to (and encouraged to) create and add your own tiles to this file. This file will
  * be turned in with the rest of your code.
- *
+ * <p>
  * Ex:
- *      world[x][y] = Tileset.FLOOR;
- *
+ * world[x][y] = Tileset.FLOOR;
+ * <p>
  * The style checker may crash when you try to style check this file due to use of unicode
  * characters. This is OK.
  */
 
 public class Tileset {
     public static final TETile AVATAR = new TETile('@', Color.white, Color.black, "you");
-    public static final TETile WALL = new TETile('#', new Color(216, 128, 128), new Color(50, 50, 50),
+    public static final TETile WALL = new TETile('#', new Color(216, 128, 128),
+            new Color(50, 50, 50),
             "wall");
     public static final TETile FLOOR = new TETile('·', new Color(128, 192, 128), Color.black,
             "floor");

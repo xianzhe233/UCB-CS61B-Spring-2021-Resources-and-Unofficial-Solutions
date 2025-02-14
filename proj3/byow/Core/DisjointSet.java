@@ -1,13 +1,15 @@
 package byow.Core;
+
 import byow.TileEngine.TETile;
 
-import static byow.Core.RandomUtils.*;
 import java.util.Random;
 
+import static byow.Core.RandomUtils.uniform;
+
 public class DisjointSet {
-    private int[] parent;
-    private int[] size;
-    private int width;
+    private final int[] parent;
+    private final int[] size;
+    private final int width;
 
     public DisjointSet(int width, int height) {
         this.width = width;

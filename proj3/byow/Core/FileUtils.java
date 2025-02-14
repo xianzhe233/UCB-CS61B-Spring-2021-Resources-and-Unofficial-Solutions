@@ -7,9 +7,11 @@ import java.nio.file.Files;
 public class FileUtils {
     /* READING AND WRITING FILE CONTENTS */
 
-    /** Return the entire contents of FILE as a byte array.  FILE must
-     *  be a normal file.  Throws IllegalArgumentException
-     *  in case of problems. */
+    /**
+     * Return the entire contents of FILE as a byte array.  FILE must
+     * be a normal file.  Throws IllegalArgumentException
+     * in case of problems.
+     */
     static byte[] readContents(File file) {
         if (!file.isFile()) {
             throw new IllegalArgumentException("must be a normal file");
@@ -21,17 +23,21 @@ public class FileUtils {
         }
     }
 
-    /** Return the entire contents of FILE as a String.  FILE must
-     *  be a normal file.  Throws IllegalArgumentException
-     *  in case of problems. */
+    /**
+     * Return the entire contents of FILE as a String.  FILE must
+     * be a normal file.  Throws IllegalArgumentException
+     * in case of problems.
+     */
     static String readContentsAsString(File file) {
         return new String(readContents(file), StandardCharsets.UTF_8);
     }
 
-    /** Write the result of concatenating the bytes in CONTENTS to FILE,
-     *  creating or overwriting it as needed.  Each object in CONTENTS may be
-     *  either a String or a byte array.  Throws IllegalArgumentException
-     *  in case of problems. */
+    /**
+     * Write the result of concatenating the bytes in CONTENTS to FILE,
+     * creating or overwriting it as needed.  Each object in CONTENTS may be
+     * either a String or a byte array.  Throws IllegalArgumentException
+     * in case of problems.
+     */
     static void writeContents(File file, Object... contents) {
         try {
             if (file.isDirectory()) {
@@ -53,8 +59,10 @@ public class FileUtils {
         }
     }
 
-    /** Return an object of type T read from FILE, casting it to EXPECTEDCLASS.
-     *  Throws IllegalArgumentException in case of problems. */
+    /**
+     * Return an object of type T read from FILE, casting it to EXPECTEDCLASS.
+     * Throws IllegalArgumentException in case of problems.
+     */
     static <T extends Serializable> T readObject(File file,
                                                  Class<T> expectedClass) {
         try {
@@ -69,12 +77,16 @@ public class FileUtils {
         }
     }
 
-    /** Write OBJ to FILE. */
+    /**
+     * Write OBJ to FILE.
+     */
     static void writeObject(File file, Serializable obj) {
         writeContents(file, serialize(obj));
     }
 
-    /** Returns a byte array containing the serialized contents of OBJ. */
+    /**
+     * Returns a byte array containing the serialized contents of OBJ.
+     */
     static byte[] serialize(Serializable obj) {
         try {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
