@@ -13,10 +13,10 @@ public class DisjointSet {
 
     public DisjointSet(int width, int height) {
         this.width = width;
-        int size = width * height;
-        parent = new int[size];
-        this.size = new int[size];
-        for (int i = 0; i < size; i++) {
+        int area = width * height;
+        parent = new int[area];
+        this.size = new int[area];
+        for (int i = 0; i < area; i++) {
             parent[i] = i;
             this.size[i] = 1;
         }
