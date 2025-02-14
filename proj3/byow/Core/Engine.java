@@ -187,7 +187,7 @@ public class Engine {
         int sPos = s.indexOf("s");
         try {
             return Long.parseLong(s.substring(nPos + 1, sPos));
-        } catch (IndexOutOfBoundsException e) {
+        } catch (Exception e) {
             return -1L;
         }
     }
